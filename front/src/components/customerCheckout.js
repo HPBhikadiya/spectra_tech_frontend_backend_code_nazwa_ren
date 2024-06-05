@@ -178,7 +178,7 @@ export default function CustomerCheckout() {
 
     try {
       // Make an HTTP POST request to your backend endpoint to create a PaymentIntent
-      const response = await axios.post("http://localhost:3002/payment/create-payment-intent", orderData, {
+      const response = await axios.post("http://localhost:3002/create-payment-intent", orderData, {
         headers: {
           Authorization: token,
         },
