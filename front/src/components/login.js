@@ -37,9 +37,9 @@ import { useForm, Controller } from "react-hook-form";
 import { onResLogin, onCustomerLogin } from "../app/reducers/mainSlice";
 import { isValidEmail } from "../utility.js";
 import { CUSTOMER_LOGIN, RESTAURANT_LOGIN } from "../graphql/mutation.js";
-import { InputAdornment, IconButton } from '@material-ui/core';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import { InputAdornment, IconButton } from "@material-ui/core";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -78,7 +78,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -87,11 +86,11 @@ export default function SignIn() {
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
-};
+  };
 
-const handleMouseDownPassword = (event) => {
+  const handleMouseDownPassword = (event) => {
     event.preventDefault();
-};
+  };
   // Using usedispatch hook
   const dispatch = useDispatch();
 
@@ -161,35 +160,29 @@ const handleMouseDownPassword = (event) => {
   //   }
   // `;
 
-  const [customerLogin] = useMutation(
-    CUSTOMER_LOGIN,
-    {
-      onCompleted(res) {
-        console.log("da", res);
-        dispatch(onCustomerLogin(res?.customerLogin));
-        setTimeout(() => history.push("/customer"), 2000);
-      },
-      onError(e) {
-        alert(JSON.parse(JSON.stringify(e))?.message);
-        console.log("--dfd", JSON.parse(JSON.stringify(e)));
-      },
-    }
-  );
+  const [customerLogin] = useMutation(CUSTOMER_LOGIN, {
+    onCompleted(res) {
+      console.log("da", res);
+      dispatch(onCustomerLogin(res?.customerLogin));
+      setTimeout(() => history.push("/customer"), 2000);
+    },
+    onError(e) {
+      alert(JSON.parse(JSON.stringify(e))?.message);
+      console.log("--dfd", JSON.parse(JSON.stringify(e)));
+    },
+  });
 
-  const [restaurantLogin] = useMutation(
-    RESTAURANT_LOGIN,
-    {
-      onCompleted(res) {
-        console.log("da", res);
-        dispatch(onResLogin(res?.restaurantLogin));
-        setTimeout(() => history.push("/res_profile"), 2000);
-      },
-      onError(e) {
-        alert(JSON.parse(JSON.stringify(e))?.message);
-        console.log("--dfd", JSON.parse(JSON.stringify(e)));
-      },
-    }
-  );
+  const [restaurantLogin] = useMutation(RESTAURANT_LOGIN, {
+    onCompleted(res) {
+      console.log("da", res);
+      dispatch(onResLogin(res?.restaurantLogin));
+      setTimeout(() => history.push("/res_profile"), 2000);
+    },
+    onError(e) {
+      alert(JSON.parse(JSON.stringify(e))?.message);
+      console.log("--dfd", JSON.parse(JSON.stringify(e)));
+    },
+  });
 
   const signInApi = async () => {
     if (!validateInputs) {
@@ -274,31 +267,36 @@ const handleMouseDownPassword = (event) => {
               // style={classes.textInput}
               inputProps={{ className: classes.textInput }}
             />
-              <TextField
-            variant="outlined"
-            margin="normal"
-            inputRef={{...register('password')}}
-            fullWidth
-            name="password"
-            label="password"
-            type={showPassword ? 'text' : 'password'} // Change type based on showPassword state
-            id="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            InputProps={{ // Add InputProps to include the eye icon
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              inputRef={{ ...register("password") }}
+              fullWidth
+              name="password"
+              label="password"
+              type={showPassword ? "text" : "password"} // Change type based on showPassword state
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                // Add InputProps to include the eye icon
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
             <FormControl component="fieldset">
               <RadioGroup
                 // aria-label="gender"

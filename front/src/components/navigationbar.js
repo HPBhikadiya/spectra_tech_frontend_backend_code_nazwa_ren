@@ -5,10 +5,7 @@ import { Link } from "react-router-dom";
 import DehazeIcon from "@material-ui/icons/Dehaze";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
-import {
-  useMutation,
-  gql,
-} from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import {
   ListItemText,
   Avatar,
@@ -56,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     transition: "background-color 0.3s, color 0.3s", // Add transition effect
     "&:hover": {
       background: "#f5f5f5", // Change background color on hover
-    },  
+    },
   },
   toolbar: {
     display: "flex",
@@ -184,7 +181,7 @@ const Navigationbar = (props) => {
       itemText: "Merchants",
       itemPath: "/customer",
     },
-    
+
     {
       itemText: "Profile",
       itemPath: "/customer_profile",
@@ -201,8 +198,7 @@ const Navigationbar = (props) => {
       itemText: "Dashboard",
       itemPath: "/",
     },
-    
-    
+
     {
       itemText: "Merchant Signup",
       itemPath: "/res_signup",
@@ -253,9 +249,18 @@ const Navigationbar = (props) => {
     <>
       <Box component="nav">
         <AppBar position="fixed" style={{ background: "white" }}>
-          <Toolbar style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+          <Toolbar
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
             <div style={{ display: "flex", alignItems: "center" }}>
-              <IconButton onClick={toggleSlider("left", true)} style={{ marginLeft: 10 }}>
+              <IconButton
+                onClick={toggleSlider("left", true)}
+                style={{ marginLeft: 10 }}
+              >
                 <DehazeIcon style={{ color: "black" }} />
               </IconButton>
               <MobileeRightMenuSlider
@@ -280,12 +285,17 @@ const Navigationbar = (props) => {
                   variant="outlined"
                   color="black"
                   onClick={() => onCartClick()}
-                  style={{ width: 100, height: 40, alignSelf: "center", marginRight: 20 }}
+                  style={{
+                    width: 100,
+                    height: 40,
+                    alignSelf: "center",
+                    marginRight: 20,
+                  }}
                 >
                   Cart
                 </Button>
               )}
-              
+
               {!token && (
                 <>
                   <Button
@@ -297,7 +307,6 @@ const Navigationbar = (props) => {
                   >
                     Customer Signup
                   </Button>
-                  
                 </>
               )}
               {!token && (
@@ -311,7 +320,6 @@ const Navigationbar = (props) => {
                   >
                     Login
                   </Button>
-                  
                 </>
               )}
             </div>

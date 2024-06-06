@@ -1,6 +1,6 @@
-import React from 'react';
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import PropTypes from 'prop-types';
+import React from "react";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import PropTypes from "prop-types";
 
 function PaymentForm({ handlePlaceOrder }) {
   const stripe = useStripe();
@@ -10,7 +10,7 @@ function PaymentForm({ handlePlaceOrder }) {
     event.preventDefault();
 
     if (!stripe || !elements) {
-      console.error('Stripe.js has not yet loaded.');
+      console.error("Stripe.js has not yet loaded.");
       return;
     }
 
@@ -18,7 +18,7 @@ function PaymentForm({ handlePlaceOrder }) {
       // Call handlePlaceOrder with stripe and elements
       await handlePlaceOrder(stripe, elements);
     } catch (error) {
-      console.error('Error processing payment:', error);
+      console.error("Error processing payment:", error);
       // Handle error gracefully (e.g., display a message to the user)
     }
   };

@@ -36,7 +36,7 @@ root.render(
         </Router>
       </PersistGate>
     </Provider>
-  </ApolloProvider>
+  </ApolloProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

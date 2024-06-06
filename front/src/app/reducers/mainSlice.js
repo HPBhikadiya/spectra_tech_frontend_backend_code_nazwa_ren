@@ -107,7 +107,7 @@ export const mainSlice = createSlice({
       // console.log("orderList", orderList.length);
       // console.log("action", action.payload);
       const orderIndex = orderList.findIndex(
-        (o) => o._id === action.payload?.order._id
+        (o) => o._id === action.payload?.order._id,
       );
       orderList[orderIndex].delivery_status = 7;
       state.customerOrders = orderList;
@@ -119,7 +119,7 @@ export const mainSlice = createSlice({
       const payload = action.payload;
       let cartList = state.cart;
       const resIndex = cartList.findIndex(
-        (res) => res._id === payload?.res?._id
+        (res) => res._id === payload?.res?._id,
       );
       if (resIndex === -1) {
         if (cartList.length >= 1) {
@@ -131,7 +131,7 @@ export const mainSlice = createSlice({
         });
       } else {
         const dishIndex = cartList[resIndex].dishes.findIndex(
-          (dish) => dish._id === payload?.dish?._id
+          (dish) => dish._id === payload?.dish?._id,
         );
         if (dishIndex === -1) {
           cartList[resIndex]?.dishes?.push({ ...payload?.dish, quantity: 1 });
@@ -148,7 +148,7 @@ export const mainSlice = createSlice({
       const resIndex = cartList.findIndex((res) => res._id === dish?.res_id);
       if (resIndex !== -1) {
         const dishIndex = cartList[resIndex].dishes.findIndex(
-          (dishItem) => dishItem._id === dish?._id
+          (dishItem) => dishItem._id === dish?._id,
         );
         if (dishIndex !== -1) {
           cartList[resIndex].dishes[dishIndex].quantity += 1;
@@ -162,7 +162,7 @@ export const mainSlice = createSlice({
       const resIndex = cartList.findIndex((res) => res._id === dish?.res_id);
       if (resIndex !== -1) {
         const dishIndex = cartList[resIndex].dishes.findIndex(
-          (dishItem) => dishItem._id === dish?._id
+          (dishItem) => dishItem._id === dish?._id,
         );
         if (dishIndex !== -1) {
           if (cartList[resIndex].dishes[dishIndex].quantity !== 1) {
@@ -178,7 +178,7 @@ export const mainSlice = createSlice({
       const resIndex = cartList.findIndex((res) => res._id === dish?.res_id);
       if (resIndex !== -1) {
         const dishIndex = cartList[resIndex].dishes.findIndex(
-          (dishItem) => dishItem._id === dish?._id
+          (dishItem) => dishItem._id === dish?._id,
         );
         if (dishIndex !== -1) {
           cartList[resIndex].dishes.splice(dishIndex, 1);

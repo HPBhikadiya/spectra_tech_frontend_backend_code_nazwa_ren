@@ -1,13 +1,13 @@
-import aws from 'aws-sdk';
+import aws from "aws-sdk";
 // var aws = require('aws-sdk');
 // import multer from 'multer';
 // import multerS3 from 'multer-s3';
-import config from '../utils/config.js';
+import config from "../utils/config.js";
 // const multer = require('multer');
 // const multerS3 = require('multer-s3');
 // const config = require('../utils/config.js');
-import S3 from 'aws-sdk/clients/s3.js';
-import fs from 'fs';
+import S3 from "aws-sdk/clients/s3.js";
+import fs from "fs";
 
 const bucketName = "ubereatsayush";
 const region = "us-east-2";
@@ -28,27 +28,27 @@ const s3 = new aws.S3({
 
 export function uploadFile(file) {
   // console.log("fileDesc", file);
-  const fileStream = fs.createReadStream(file.path)
+  const fileStream = fs.createReadStream(file.path);
   // console.log("file", file);
 
   const uploadParams = {
     Bucket: bucketName,
     Body: fileStream,
     Key: file.filename,
-  }
+  };
 
-  return s3.upload(uploadParams).promise()
+  return s3.upload(uploadParams).promise();
 }
 
 export function getFileStream(fileKey) {
   const downloadParams = {
     Key: fileKey,
-    Bucket: bucketName
-  }
-  return s3.getObject(downloadParams).createReadStream()
+    Bucket: bucketName,
+  };
+  return s3.getObject(downloadParams).createReadStream();
 }
 
-export default uploadFile
+export default uploadFile;
 
 // const isImage = (req,file,callbck)=>{
 //     if(file.mimetype.startsWith('image')){
@@ -74,6 +74,6 @@ export default uploadFile
 //       }
 //     })
 //   });
-  
+
 // exports.upload = upload;
 // export default upload;

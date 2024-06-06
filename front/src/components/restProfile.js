@@ -1,17 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import Navigationbar from './navigationbar.js';
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import Navigationbar from "./navigationbar.js";
 // import { Redirect, Router} from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
-import axios from 'axios';
-import { 
-    Avatar, CssBaseline, Button, Container, FormControl, FormLabel, FormControlLabel,
-    makeStyles, Link, Grid, Checkbox, Typography, TextField, Radio, RadioGroup, MenuItem,
-} from '@material-ui/core';
+import { useHistory } from "react-router-dom";
+import axios from "axios";
+import {
+  Avatar,
+  CssBaseline,
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  FormControlLabel,
+  makeStyles,
+  Link,
+  Grid,
+  Checkbox,
+  Typography,
+  TextField,
+  Radio,
+  RadioGroup,
+  MenuItem,
+} from "@material-ui/core";
 
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import {useForm, Controller} from 'react-hook-form'
-import { onResLogin, onCustomerLogin, updateResProfile } from '../app/reducers/mainSlice';
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { useForm, Controller } from "react-hook-form";
+import {
+  onResLogin,
+  onCustomerLogin,
+  updateResProfile,
+} from "../app/reducers/mainSlice";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
   textInput: {
     borderColor: theme.palette.success.light,
-    
+
     "& input": {
       padding: "12px",
     },
@@ -52,259 +70,270 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ResProfile() {
-    const mainReducer = useSelector((state) => state.mainReducer);
-    const { resProfile, token } = mainReducer;
-    console.log("resProfile", resProfile);
-    const [name, setName] = useState(resProfile && ( resProfile?.name ||  ""));
-    const [phone, setPhone] = useState(resProfile?.phone_number || "");
-    const [description, setDescription] = useState(resProfile?.description || "");
-    const [discount, setDiscount] = useState(resProfile?.discount || 0);
-    const [streetAddress, setStreetAddress] = useState(resProfile?.address?.street_address ||  "");
-    const [aptNumber, setAptNumber] = useState(resProfile?.address?.apt_number ||  "");
-    const [city, setCity] = useState(resProfile?.address?.city ||  "san jose");
-    const [state, setState] = useState(resProfile?.address?.state ||  "california");
-    const [country, setCountry] = useState(resProfile?.address?.country ||  "united states");
-    const [zipcode, setZipcode] = useState(resProfile?.address?.zipcode ||  "95111");
-    const [timingOpen, setTimingOpen] = useState(resProfile?.timing_open ||  "");
-    const [timingClose, setTimingClose] = useState(resProfile?.timing_close ||  "");
-    const [deliveryOptions, setDeliveryOptions] = useState((resProfile?.delivery_option));
-    const [imageFile, setImageFile] = useState(null);
-    const [imageUrl, setImageUrl] = useState(resProfile?.image || '');
-   
-    const countries = [
-      {
-        value: 'united states',
-        label: 'United States',
-      },
-      {
-        value: 'india',
-        label: 'India',
-      },
-      {
-        value: 'Canada',
-        label: 'Canada',
-      },
-      {
-        value: 'united kingdom',
-        label: 'United Kingdom',
-      },
-      {
-        value: 'australia',
-        label: 'Australia',
-      },
-      {
-        value: 'germany',
-        label: 'Germany',
-      },
-      {
-        value: 'france',
-        label: 'France',
-      },
-      {
-        value: 'japan',
-        label: 'Japan',
-      },
-      {
-        value: 'china',
-        label: 'China',
-      },
-      {
-        value: 'brazil',
-        label: 'Brazil',
-      },
-      {
-        value: 'south korea',
-        label: 'South Korea',
-      },
-      {
-        value: 'russia',
-        label: 'Russia',
-      },
-      {
-        value: 'italy',
-        label: 'Italy',
-      },
-      {
-        value: 'mexico',
-        label: 'Mexico',
-      },
-      {
-        value: 'south africa',
-        label: 'South Africa',
-      },
-      {
-        value: 'spain',
-        label: 'Spain',
-      },
-      {
-        value: 'netherlands',
-        label: 'Netherlands',
-      },
-      {
-        value: 'sweden',
-        label: 'Sweden',
-      },
-      {
-        value: 'switzerland',
-        label: 'Switzerland',
-      },
-      {
-        value: 'norway',
-        label: 'Norway',
-      },
-      {
-        value: 'new zealand',
-        label: 'New Zealand',
-      },
-      {
-        value: 'singapore',
-        label: 'Singapore',
-      },
-      {
-        value: 'belgium',
-        label: 'Belgium',
-      },
-      {
-        value: 'austria',
-        label: 'Austria',
-      },
-      {
-        value: 'ireland',
-        label: 'Ireland',
-      },
-      {
-        value: 'denmark',
-        label: 'Denmark',
-      },
-      {
-        value: 'finland',
-        label: 'Finland',
-      },
-      {
-        value: 'poland',
-        label: 'Poland',
-      },
-      {
-        value: 'czech republic',
-        label: 'Czech Republic',
-      },
-      {
-        value: 'portugal',
-        label: 'Portugal',
-      },
-      {
-        value: 'Morocco',
-        label: 'Morocco',
-      },
-      ];
-    
-    const deliveryOptionList = [
-        
-        {
-            value: 2,
-            label: 'Take out',
-        },
-        {
-            value: 3,
-            label: 'Dine-in',
-        },
-    ];
+  const mainReducer = useSelector((state) => state.mainReducer);
+  const { resProfile, token } = mainReducer;
+  console.log("resProfile", resProfile);
+  const [name, setName] = useState(resProfile && (resProfile?.name || ""));
+  const [phone, setPhone] = useState(resProfile?.phone_number || "");
+  const [description, setDescription] = useState(resProfile?.description || "");
+  const [discount, setDiscount] = useState(resProfile?.discount || 0);
+  const [streetAddress, setStreetAddress] = useState(
+    resProfile?.address?.street_address || "",
+  );
+  const [aptNumber, setAptNumber] = useState(
+    resProfile?.address?.apt_number || "",
+  );
+  const [city, setCity] = useState(resProfile?.address?.city || "san jose");
+  const [state, setState] = useState(
+    resProfile?.address?.state || "california",
+  );
+  const [country, setCountry] = useState(
+    resProfile?.address?.country || "united states",
+  );
+  const [zipcode, setZipcode] = useState(
+    resProfile?.address?.zipcode || "95111",
+  );
+  const [timingOpen, setTimingOpen] = useState(resProfile?.timing_open || "");
+  const [timingClose, setTimingClose] = useState(
+    resProfile?.timing_close || "",
+  );
+  const [deliveryOptions, setDeliveryOptions] = useState(
+    resProfile?.delivery_option,
+  );
+  const [imageFile, setImageFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState(resProfile?.image || "");
 
-    useEffect(() => {}, [])
-    const dispatch = useDispatch()
-    const classes = useStyles();
-    const {register, handleSubmit, control} = useForm()
-    const history = useHistory();
-    console.log("token==", token);
-    const url =  "/restaurants/profile";
-    const handleImageFileChange = async (event) => {
-      const file = event.target.files[0];
-      if (file) {
-          const formData = new FormData();
-          formData.append('file', file);
+  const countries = [
+    {
+      value: "united states",
+      label: "United States",
+    },
+    {
+      value: "india",
+      label: "India",
+    },
+    {
+      value: "Canada",
+      label: "Canada",
+    },
+    {
+      value: "united kingdom",
+      label: "United Kingdom",
+    },
+    {
+      value: "australia",
+      label: "Australia",
+    },
+    {
+      value: "germany",
+      label: "Germany",
+    },
+    {
+      value: "france",
+      label: "France",
+    },
+    {
+      value: "japan",
+      label: "Japan",
+    },
+    {
+      value: "china",
+      label: "China",
+    },
+    {
+      value: "brazil",
+      label: "Brazil",
+    },
+    {
+      value: "south korea",
+      label: "South Korea",
+    },
+    {
+      value: "russia",
+      label: "Russia",
+    },
+    {
+      value: "italy",
+      label: "Italy",
+    },
+    {
+      value: "mexico",
+      label: "Mexico",
+    },
+    {
+      value: "south africa",
+      label: "South Africa",
+    },
+    {
+      value: "spain",
+      label: "Spain",
+    },
+    {
+      value: "netherlands",
+      label: "Netherlands",
+    },
+    {
+      value: "sweden",
+      label: "Sweden",
+    },
+    {
+      value: "switzerland",
+      label: "Switzerland",
+    },
+    {
+      value: "norway",
+      label: "Norway",
+    },
+    {
+      value: "new zealand",
+      label: "New Zealand",
+    },
+    {
+      value: "singapore",
+      label: "Singapore",
+    },
+    {
+      value: "belgium",
+      label: "Belgium",
+    },
+    {
+      value: "austria",
+      label: "Austria",
+    },
+    {
+      value: "ireland",
+      label: "Ireland",
+    },
+    {
+      value: "denmark",
+      label: "Denmark",
+    },
+    {
+      value: "finland",
+      label: "Finland",
+    },
+    {
+      value: "poland",
+      label: "Poland",
+    },
+    {
+      value: "czech republic",
+      label: "Czech Republic",
+    },
+    {
+      value: "portugal",
+      label: "Portugal",
+    },
+    {
+      value: "Morocco",
+      label: "Morocco",
+    },
+  ];
 
-          try {
-              const response = await axios.post('/upload_image', formData, {
-                  headers: {
-                      'Content-Type': 'multipart/form-data',
-                  },
-              });
+  const deliveryOptionList = [
+    {
+      value: 2,
+      label: "Take out",
+    },
+    {
+      value: 3,
+      label: "Dine-in",
+    },
+  ];
 
-              const imageUrl = response.data.imageUrl;
-              setImageUrl(imageUrl);
-              setImageFile(file);
-          } catch (error) {
-              console.error('Error uploading file:', error);
-          }
+  useEffect(() => {}, []);
+  const dispatch = useDispatch();
+  const classes = useStyles();
+  const { register, handleSubmit, control } = useForm();
+  const history = useHistory();
+  console.log("token==", token);
+  const url = "/restaurants/profile";
+  const handleImageFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post("/upload_image", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        const imageUrl = response.data.imageUrl;
+        setImageUrl(imageUrl);
+        setImageFile(file);
+      } catch (error) {
+        console.error("Error uploading file:", error);
       }
+    }
   };
-    const updateProfileApi = async () => {
-      if(!validateInputs()) {
-        return false;
-      }
-      
-        const body = {
-            res_id: resProfile?._id,
-            name,
-            // address_id: resProfile?.address?.address_id,
-            delivery_option: "1",
-            phone_number: phone,
-            description: description || `${name} is a good restaurant`,
-            timing_open: timingOpen,
-            timing_close: timingClose,
-            street_address: streetAddress,
-            apt_number: aptNumber,
-            city: city,
-            state: state,
-            country: country,
-            zipcode: zipcode,
-            isAddressUpdated: true,
-            restaurant_image: imageUrl,
-            discount
-        };
-        console.log('test here'+ body);
-        const headers = { 
-            'x-access-token': token,
-        };
-        console.log("body", body);
-        try {
-            const res = await axios.put(url,body, {headers});
-            console.log("response",res);
-            dispatch(updateResProfile(res.data))
-            setTimeout(() => history.push("/"), 500);
-            
-        }catch(err){
-            console.log(err)
-        }
-
+  const updateProfileApi = async () => {
+    if (!validateInputs()) {
+      return false;
     }
 
-    const validateInputs = () =>  {
-      if (!name) {
-        alert("Needs name");
-        return false
-      }
-      // if (!isValidEmail(email)) {
-      //   alert("Invalid Email");
-      //   return false
-      // }
-      if (!city) {
-        alert("Needs city");
-        return false
-      }
-      if (!country) { 
-        alert("Needs country");
-        return false
-      }
-      return true
+    const body = {
+      res_id: resProfile?._id,
+      name,
+      // address_id: resProfile?.address?.address_id,
+      delivery_option: "1",
+      phone_number: phone,
+      description: description || `${name} is a good restaurant`,
+      timing_open: timingOpen,
+      timing_close: timingClose,
+      street_address: streetAddress,
+      apt_number: aptNumber,
+      city: city,
+      state: state,
+      country: country,
+      zipcode: zipcode,
+      isAddressUpdated: true,
+      restaurant_image: imageUrl,
+      discount,
+    };
+    console.log("test here" + body);
+    const headers = {
+      "x-access-token": token,
+    };
+    console.log("body", body);
+    try {
+      const res = await axios.put(url, body, { headers });
+      console.log("response", res);
+      dispatch(updateResProfile(res.data));
+      setTimeout(() => history.push("/"), 500);
+    } catch (err) {
+      console.log(err);
     }
-    const onClickSubmit = (data) => {
-        console.log("calling")
-        updateProfileApi();
+  };
+
+  const validateInputs = () => {
+    if (!name) {
+      alert("Needs name");
+      return false;
     }
-    const onError = (errors, e) => {
-        console.log("errors", errors, "e", e);
+    // if (!isValidEmail(email)) {
+    //   alert("Invalid Email");
+    //   return false
+    // }
+    if (!city) {
+      alert("Needs city");
+      return false;
     }
+    if (!country) {
+      alert("Needs country");
+      return false;
+    }
+    return true;
+  };
+  const onClickSubmit = (data) => {
+    console.log("calling");
+    updateProfileApi();
+  };
+  const onError = (errors, e) => {
+    console.log("errors", errors, "e", e);
+  };
   return (
     <>
       <Navigationbar />
@@ -317,31 +346,35 @@ export default function ResProfile() {
           <Typography component="h1" variant="h5">
             Restaurant Profile
           </Typography>
-          <form className={classes.form} noValidate  onSubmit={handleSubmit(onClickSubmit, onError)}>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageFileChange}
-          />
+          <form
+            className={classes.form}
+            noValidate
+            onSubmit={handleSubmit(onClickSubmit, onError)}
+          >
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageFileChange}
+            />
             <TextField
               variant="outlined"
               margin="normal"
-              inputRef={{...register('name')}}
+              inputRef={{ ...register("name") }}
               fullWidth
               id="name"
               label="name"
               name="name"
-              type='text'
+              type="text"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               autoFocus
-              inputProps={{className: classes.textInput}}
+              inputProps={{ className: classes.textInput }}
             />
             <TextField
               variant="outlined"
               margin="normal"
               // , { required: true }
-              inputRef={{...register('phone')}}
+              inputRef={{ ...register("phone") }}
               // required
               fullWidth
               name="phone"
@@ -349,36 +382,37 @@ export default function ResProfile() {
               type="tel"
               id="phone"
               value={phone}
-              onChange={e => setPhone(e.target.value)}
+              onChange={(e) => setPhone(e.target.value)}
             />
-             <TextField
+            <TextField
               variant="outlined"
               margin="normal"
-              inputRef={{...register('description')}}
+              inputRef={{ ...register("description") }}
               fullWidth
               id="description"
               label="description"
               name="description"
-              type='text'
+              type="text"
               value={description}
-              onChange={e => setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
               autoFocus
-              inputProps={{className: classes.textInput}}
+              inputProps={{ className: classes.textInput }}
             />
-             <TextField
+            <TextField
               variant="outlined"
               margin="normal"
-              inputRef={{...register('discount')}}
+              inputRef={{ ...register("discount") }}
               fullWidth
               id="discount"
               label="discount"
               name="discount"
-              type='number'
+              type="number"
               value={discount}
-              onChange={e => {
-                if(e.target.value >= 0 && e.target.value <= 100) {
-                  setDiscount(e.target.value)}}
+              onChange={(e) => {
+                if (e.target.value >= 0 && e.target.value <= 100) {
+                  setDiscount(e.target.value);
                 }
+              }}
               autoFocus
               inputProps={{
                 className: classes.textInput,
@@ -387,17 +421,17 @@ export default function ResProfile() {
                 step: 1,
                 pattern: "\\d*",
                 onKeyDown: (e) => {
-                  if (e.key === '.' || e.key === '-') {
+                  if (e.key === "." || e.key === "-") {
                     e.preventDefault();
                   }
-                }
+                },
               }}
             />
             <TextField
               variant="outlined"
               margin="normal"
               // , { required: true }
-              inputRef={{...register('streetAddress')}}
+              inputRef={{ ...register("streetAddress") }}
               // required
               fullWidth
               name="streetAddress"
@@ -405,14 +439,14 @@ export default function ResProfile() {
               type="text"
               id="streetAddress"
               value={streetAddress}
-              onChange={e => setStreetAddress(e.target.value)}
+              onChange={(e) => setStreetAddress(e.target.value)}
             />
-            
+
             <TextField
               variant="outlined"
               margin="normal"
               // , { required: true }
-              inputRef={{...register('city')}}
+              inputRef={{ ...register("city") }}
               // required
               fullWidth
               name="city"
@@ -420,13 +454,13 @@ export default function ResProfile() {
               type="text"
               id="city"
               value={city}
-              onChange={e => setCity(e.target.value)}
+              onChange={(e) => setCity(e.target.value)}
             />
             <TextField
               variant="outlined"
               margin="normal"
               // , { required: true }
-              inputRef={{...register('state')}}
+              inputRef={{ ...register("state") }}
               // required
               fullWidth
               name="state"
@@ -434,7 +468,7 @@ export default function ResProfile() {
               type="text"
               id="state"
               value={state}
-              onChange={e => setState(e.target.value)}
+              onChange={(e) => setState(e.target.value)}
             />
             {/* <TextField
               variant="outlined"
@@ -454,7 +488,7 @@ export default function ResProfile() {
               variant="outlined"
               margin="normal"
               // , { required: true }
-              inputRef={{...register('zipcode')}}
+              inputRef={{ ...register("zipcode") }}
               // required
               fullWidth
               name="zipcode"
@@ -462,13 +496,13 @@ export default function ResProfile() {
               type="text"
               id="zipcode"
               value={zipcode}
-              onChange={e => setZipcode(e.target.value)}
+              onChange={(e) => setZipcode(e.target.value)}
             />
-          <TextField
+            <TextField
               variant="outlined"
               margin="normal"
               // , { required: true }
-              inputRef={{...register('timingOpen')}}
+              inputRef={{ ...register("timingOpen") }}
               // required
               fullWidth
               name="timingOpen"
@@ -476,13 +510,13 @@ export default function ResProfile() {
               type="text"
               id="timingOpen"
               value={timingOpen}
-              onChange={e => setTimingOpen(e.target.value)}
+              onChange={(e) => setTimingOpen(e.target.value)}
             />
-          <TextField
+            <TextField
               variant="outlined"
               margin="normal"
               // , { required: true }
-              inputRef={{...register('timingClose')}}
+              inputRef={{ ...register("timingClose") }}
               // required
               fullWidth
               name="timingClose"
@@ -490,23 +524,23 @@ export default function ResProfile() {
               type="text"
               id="timingClose"
               value={timingClose}
-              onChange={e => setTimingClose(e.target.value)}
+              onChange={(e) => setTimingClose(e.target.value)}
             />
-          <TextField
-            id="outlined-select-currency"
-            select
-            label="country"
-            value={country}
-            onChange={e => setCountry(e.target.value)}
-          //   helperText="Please select your currency"
-          >
-            {countries.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-          {/*<TextField
+            <TextField
+              id="outlined-select-currency"
+              select
+              label="country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              //   helperText="Please select your currency"
+            >
+              {countries.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            {/*<TextField
             id="outlined-select-currency"
             select
             label="Options"

@@ -54,7 +54,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import PaymentForm from "./PaymentForm";
 
 const stripePromise = loadStripe(
-  "pk_test_51PD8wPGEpr3f403gfUpeHIf1hqpuU85b9lTXiPbFtRiWgE1DrlIWJXXmX47HTfKOvAqo2vgTwFTH2LUv6n6WY7KS00qeft1Nhu"
+  "pk_test_51PD8wPGEpr3f403gfUpeHIf1hqpuU85b9lTXiPbFtRiWgE1DrlIWJXXmX47HTfKOvAqo2vgTwFTH2LUv6n6WY7KS00qeft1Nhu",
 );
 
 const useStyles = makeStyles({
@@ -75,7 +75,7 @@ export default function CustomerCheckout() {
   const mainReducer = useSelector((state) => state.mainReducer);
   const { customerProfile, token, cart = [] } = mainReducer;
   const [deliveryAddressList, setDeliveryAddressList] = useState(
-    customerProfile.delivery_addresses || []
+    customerProfile.delivery_addresses || [],
   );
   const [selectedAddress, setSelectedAddress] = useState();
   const [newAddess, setNewAddess] = useState();
@@ -195,7 +195,7 @@ export default function CustomerCheckout() {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
 
       // Assuming the response from your backend includes the client secret for the PaymentIntent
