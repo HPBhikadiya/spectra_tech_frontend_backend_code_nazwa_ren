@@ -129,7 +129,7 @@ export default function ResLanding(props) {
       <Navigationbar  showCart={true} onCartClick={handleClickOpen}/>
       <Box component="div" className={classes.container}>
         <h1 className={classes.Header} style={{marginLeft: '40px'}}>
-          {capsStrFirstChar(selectedRes.name || 'subway')}
+          {capsStrFirstChar(selectedRes.name || 'subway')} ( {selectedRes.discount && selectedRes.discount > 0 && <>{selectedRes.discount} %OFF</>} )
         </h1>
         <Typography variant="body2" style={{marginLeft: '40px'}}>{selectedRes.description}</Typography>
         <Typography variant="caption" style={{marginLeft: '40px'}}>{`Open between ${selectedRes.timing_open} to ${selectedRes.timing_close}`}</Typography>

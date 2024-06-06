@@ -24,6 +24,7 @@ const restaurantSchema = new Schema({
     email: { type: String, required: true, trim: true },
     password: { type: String, required: true, trim: true },
     delivery_option: { type: Number, default: 1},
+    discount: { type: Number, default: 0},
     phone_number: String,
     description: String,
     timing_open: String,

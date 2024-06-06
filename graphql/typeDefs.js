@@ -20,6 +20,7 @@ const typeDefs = gql`
     type Restaurant {
         _id: ID!
         name: String!
+        discount: Int!
         email: String!
         password: String!
         delivery_option: Int!

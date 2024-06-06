@@ -58,6 +58,7 @@ export default function ResProfile() {
     const [name, setName] = useState(resProfile && ( resProfile?.name ||  ""));
     const [phone, setPhone] = useState(resProfile?.phone_number || "");
     const [description, setDescription] = useState(resProfile?.description || "");
+    const [discount, setDiscount] = useState(resProfile?.discount || 0);
     const [streetAddress, setStreetAddress] = useState(resProfile?.address?.street_address ||  "");
     const [aptNumber, setAptNumber] = useState(resProfile?.address?.apt_number ||  "");
     const [city, setCity] = useState(resProfile?.address?.city ||  "san jose");
@@ -259,6 +260,7 @@ export default function ResProfile() {
             zipcode: zipcode,
             isAddressUpdated: true,
             restaurant_image: imageUrl,
+            discount
         };
         console.log('test here'+ body);
         const headers = { 
@@ -355,13 +357,41 @@ export default function ResProfile() {
               inputRef={{...register('description')}}
               fullWidth
               id="description"
-              label="discount"
+              label="description"
               name="description"
               type='text'
               value={description}
               onChange={e => setDescription(e.target.value)}
               autoFocus
               inputProps={{className: classes.textInput}}
+            />
+             <TextField
+              variant="outlined"
+              margin="normal"
+              inputRef={{...register('discount')}}
+              fullWidth
+              id="discount"
+              label="discount"
+              name="discount"
+              type='number'
+              value={discount}
+              onChange={e => {
+                if(e.target.value >= 0 && e.target.value <= 100) {
+                  setDiscount(e.target.value)}}
+                }
+              autoFocus
+              inputProps={{
+                className: classes.textInput,
+                min: 0,
+                max: 100,
+                step: 1,
+                pattern: "\\d*",
+                onKeyDown: (e) => {
+                  if (e.key === '.' || e.key === '-') {
+                    e.preventDefault();
+                  }
+                }
+              }}
             />
             <TextField
               variant="outlined"

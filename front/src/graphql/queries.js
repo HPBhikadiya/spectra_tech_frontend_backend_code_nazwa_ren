@@ -6,7 +6,7 @@ const GET_ALL_RES = gql`
 query getRestaurants($customer_city: String, $search: String ) {
   getRestaurants(customer_city: $customer_city, search: $search) {
     address {street_address apt_number city state country zipcode}
-    _id name email password delivery_option phone_number description restaurant_image timing_open timing_close token
+    _id name discount email password delivery_option phone_number description restaurant_image timing_open timing_close token
     dishes {
       _id, description, dish_name, dish_image, dish_price, description, main_ingredient, dish_category,food_type, res_id
     }

@@ -35,10 +35,10 @@ router.get('/', async (req, res) => {
 // Update restaurant profile
 router.put('/profile', async (req, res) => {
     try {
-        const { res_id, name, delivery_option, phone_number, description, restaurant_image, timing_open, timing_close, street_address, apt_number, city, state, country, zipcode } = req.body;
+        const { res_id, name,discount, delivery_option, phone_number, description, restaurant_image, timing_open, timing_close, street_address, apt_number, city, state, country, zipcode } = req.body;
         console.log("profile"+req.body.restaurant_image);
         const update = {
-            name, delivery_option, phone_number, description,restaurant_image, timing_open, timing_close,
+            name, delivery_option,discount, phone_number, description,restaurant_image, timing_open, timing_close,
             address: {
                 street_address, apt_number, city, state, country, zipcode,
             }
