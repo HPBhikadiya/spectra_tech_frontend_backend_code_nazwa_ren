@@ -49,7 +49,7 @@ const PLACE_ORDER = gql`
     $taxes: Float
     $instruction: String
     $tip: Float
-    $cart: [CartInput]
+    $cart: [CartInput]!
   ) {
     placeOrder(
       placeOrderInput: {

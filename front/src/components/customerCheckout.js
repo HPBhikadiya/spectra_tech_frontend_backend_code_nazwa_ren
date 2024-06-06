@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import moment from "moment";
 import {
   ApolloClient,
   InMemoryCache,
@@ -246,7 +247,31 @@ export default function CustomerCheckout() {
       } else {
         placeOrder({
           variables: {
-            customer_id,
+            customer_id: customerProfile._id.toString(),
+            delivery_type: isPickupOnlyRes ? 2 : 1,
+            first_name: customerProfile.first_name,
+            last_name: customerProfile.last_name,
+            delivery_address:
+              selectedAddress ||
+              `${street_address}, ${zipcode}, ${city}, ${state}, ${country}`,
+            order_date_time: moment().toISOString(),
+            total_amount: subTotalAmount,
+            delivery_fee: deliveryFee,
+            taxes,
+            instruction: cart[0]?.instruction,
+            tip,
+            cart: cart.map((item) => {
+              delete item.restaurant_image;
+              return {
+                ...item,
+                dishes: item.dishes.map((itemDish) => {
+                  return {
+                    ...itemDish,
+                    dish_price: parseFloat(itemDish.dish_price),
+                  };
+                }),
+              };
+            }),
           },
         });
         // Payment successful

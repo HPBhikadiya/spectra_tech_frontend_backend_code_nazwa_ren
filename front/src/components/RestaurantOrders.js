@@ -97,9 +97,7 @@ export default function CustomerOrders(props) {
     };
     let allowedStatus = orderDict[parseInt(orderFilter)];
     setListOnDisplay(
-      resOrders.filter((order) =>
-        allowedStatus.includes(order.delivery_status),
-      ),
+      resOrders.filter((order) => allowedStatus.includes(order.delivery_status))
     );
   }, [resOrders, orderFilter]);
   const history = useHistory();
@@ -192,7 +190,7 @@ export default function CustomerOrders(props) {
   const updateOrderStatusApi = async (
     order_id,
     delivery_status,
-    delivery_type,
+    delivery_type
   ) => {
     if (parseInt(delivery_status) === 7) {
       return;
@@ -224,7 +222,6 @@ export default function CustomerOrders(props) {
       order_id,
       delivery_status: deliveryToOrderMap[parseInt(delivery_status)] || 1,
     };
-
     try {
       updateResOrderStatus({
         variables: { ...body },
@@ -240,7 +237,7 @@ export default function CustomerOrders(props) {
   const cancelOrderStatusApi = async (
     order_id,
     delivery_status,
-    delivery_type,
+    delivery_type
   ) => {
     if ([7, 6, 4].includes(parseInt(delivery_status))) {
       return;
@@ -348,7 +345,7 @@ export default function CustomerOrders(props) {
                       style={{ fontSize: 14 }}
                     >
                       {capsStrFirstChar(
-                        `${order?.first_name} ${order?.last_name}`,
+                        `${order?.first_name} ${order?.last_name}`
                       )}
                     </Typography>
                   </Button>
@@ -360,7 +357,7 @@ export default function CustomerOrders(props) {
                     }}
                   >
                     {capsStrFirstChar(
-                      `${getOrderStatus(order?.delivery_status)}`,
+                      `${getOrderStatus(order?.delivery_status)}`
                     )}
                   </Typography>
                 </div>
@@ -374,7 +371,9 @@ export default function CustomerOrders(props) {
                   }}
                 >
                   <Typography variant="caption" style={{}}>
-                    {`${moment(order.order_date_time).format("yyyy-MM-DD ddd hh:mm:ss")} `}
+                    {`${moment(order.order_date_time).format(
+                      "yyyy-MM-DD ddd hh:mm:ss"
+                    )} `}
                   </Typography>
                   <Typography variant="caption" style={{ paddingLeft: 5 }}>
                     {`$${order.total_amount}`}
@@ -411,7 +410,7 @@ export default function CustomerOrders(props) {
                       updateOrderStatusApi(
                         order?._id,
                         order?.delivery_status,
-                        order?.delivery_type,
+                        order?.delivery_type
                       )
                     }
                   >
@@ -430,7 +429,7 @@ export default function CustomerOrders(props) {
                         cancelOrderStatusApi(
                           order?._id,
                           order?.delivery_status,
-                          order?.delivery_type,
+                          order?.delivery_type
                         )
                       }
                     >

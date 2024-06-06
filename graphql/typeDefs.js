@@ -135,6 +135,7 @@ const typeDefs = gql`
     timing_close: String
     instruction: String
     token: String
+    discount: Int!
     dishes: [dishCartInput]
   }
   input AddressInput {
