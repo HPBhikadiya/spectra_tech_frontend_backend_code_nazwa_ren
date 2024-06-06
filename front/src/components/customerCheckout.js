@@ -50,10 +50,12 @@ import CartDialog from "./CartDialog";
 import { PLACE_ORDER } from "../graphql/mutation";
 import { loadStripe } from "@stripe/stripe-js";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { Elements } from '@stripe/react-stripe-js';
-import PaymentForm from './PaymentForm';
+import { Elements } from "@stripe/react-stripe-js";
+import PaymentForm from "./PaymentForm";
 
-const stripePromise = loadStripe("pk_test_51PD8wPGEpr3f403gfUpeHIf1hqpuU85b9lTXiPbFtRiWgE1DrlIWJXXmX47HTfKOvAqo2vgTwFTH2LUv6n6WY7KS00qeft1Nhu");
+const stripePromise = loadStripe(
+  "pk_test_51PD8wPGEpr3f403gfUpeHIf1hqpuU85b9lTXiPbFtRiWgE1DrlIWJXXmX47HTfKOvAqo2vgTwFTH2LUv6n6WY7KS00qeft1Nhu"
+);
 
 const useStyles = makeStyles({
   //   gridContainer: {
@@ -124,14 +126,22 @@ export default function CustomerCheckout() {
 
   let subTotalAmount = 0;
   for (let resIndex = 0; resIndex < cart.length; resIndex++) {
-    for (let dishIndex = 0; dishIndex < cart[resIndex].dishes?.length; dishIndex++) {
+    for (
+      let dishIndex = 0;
+      dishIndex < cart[resIndex].dishes?.length;
+      dishIndex++
+    ) {
       subTotalAmount +=
-        cart[resIndex].dishes[dishIndex].dish_price * cart[resIndex].dishes[dishIndex].quantity;
+        cart[resIndex].dishes[dishIndex].dish_price *
+        cart[resIndex].dishes[dishIndex].quantity;
     }
   }
 
   const deliveryFee = 0.0;
-  const taxes = 0.0;
+  const taxes = (subTotalAmount * 14.975) / 100;
+  // const taxes = (subTotalAmount * 14.975) / 100;
+  console.log({ taxes, subTotalAmount });
+  // console.log({ taxes, subTotalAmount });
   const totalAmount = deliveryFee * cart.length + taxes + subTotalAmount;
   const isPickupOnlyRes = cart.length > 0 && cart[0]?.delivery_option === 3;
 
@@ -153,8 +163,8 @@ export default function CustomerCheckout() {
     },
   });
 
-  const handlePlaceOrder = async () => {
-    if (!isPickupOnlyRes &&!selectedAddress) {
+  const handlePlaceOrder = async (stripe, elements) => {
+    if (!isPickupOnlyRes && !selectedAddress) {
       alert("Select a delivery address");
       return;
     }
@@ -164,7 +174,7 @@ export default function CustomerCheckout() {
       customer_id,
       first_name: customerProfile?.first_name,
       last_name: customerProfile?.first_name,
-      delivery_type: isPickupOnlyRes? 2 : 1,
+      delivery_type: isPickupOnlyRes ? 2 : 1,
       delivery_address:
         selectedAddress ||
         `${street_address}, ${zipcode}, ${city}, ${state}, ${country}`,
@@ -178,11 +188,15 @@ export default function CustomerCheckout() {
 
     try {
       // Make an HTTP POST request to your backend endpoint to create a PaymentIntent
-      const response = await axios.post("http://localhost:3002/payment/create-payment-intent", orderData, {
-        headers: {
-          Authorization: token,
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:3002/payment/create-payment-intent",
+        orderData,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
 
       // Assuming the response from your backend includes the client secret for the PaymentIntent
       const clientSecret = response.data.clientSecret;
@@ -190,7 +204,7 @@ export default function CustomerCheckout() {
 
       // Use Stripe.js and Elements to handle payment confirmation
       const stripe = await stripePromise;
-      const elements = useElements();
+      // const elements = useElements();
       const cardElement = elements.getElement(CardElement);
 
       const result = await stripe.confirmCardPayment(clientSecret, {
@@ -233,9 +247,7 @@ export default function CustomerCheckout() {
         <div style={{ backgroundColor: "white", flex: 1 }}>
           <List sx={{ pt: 0 }}>
             <div style={{ paddingLeft: 10, paddingBottom: 20 }}>
-              <Typography
-                style={{ alignSelf: "center", textAlign: "center" }}
-              >
+              <Typography style={{ alignSelf: "center", textAlign: "center" }}>
                 Ordered Items
               </Typography>
 
@@ -306,7 +318,7 @@ export default function CustomerCheckout() {
               </ListItem>
             </div>
           </List>
-          {isPickupOnlyRes? (
+          {isPickupOnlyRes ? (
             <Typography
               variant="body1"
               color="black"
@@ -327,7 +339,10 @@ export default function CustomerCheckout() {
                   onChange={(e) => setSelectedAddress(e.target.value)}
                 >
                   {deliveryAddressList.map((option) => (
-                    <MenuItem key={option.delivery_address} value={option.delivery_address}>
+                    <MenuItem
+                      key={option.delivery_address}
+                      value={option.delivery_address}
+                    >
                       {option.delivery_address}
                     </MenuItem>
                   ))}
@@ -482,16 +497,17 @@ export default function CustomerCheckout() {
           </div>
         </div>
         <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle style={{ textAlign: 'center', borderBottom: '1px solid #ccc' }}>
-        Payment Details
-      </DialogTitle>
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <Elements stripe={stripePromise}>
-        <PaymentForm handlePlaceOrder={handlePlaceOrder} />
-        </Elements>
-        
-      </div>
-    </Dialog>
+          <DialogTitle
+            style={{ textAlign: "center", borderBottom: "1px solid #ccc" }}
+          >
+            Payment Details
+          </DialogTitle>
+          <div style={{ padding: "20px", textAlign: "center" }}>
+            <Elements stripe={stripePromise}>
+              <PaymentForm handlePlaceOrder={handlePlaceOrder} />
+            </Elements>
+          </div>
+        </Dialog>
       </div>
     </>
   );

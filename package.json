@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha",
-    "dev": "concurrently \"nodemon --exec babel-node index.js\" ",
+    "dev": "concurrently \"nodemon --exec babel-node index.js\" \"cd front && npm start\"",
     "build": "babel src --out-dir build",
     "start": "node index.js"
   },
