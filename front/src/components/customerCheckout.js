@@ -261,7 +261,7 @@ export default function CustomerCheckout() {
             instruction: cart[0]?.instruction,
             tip,
             cart: cart.map((item) => {
-              delete item.restaurant_image;
+              delete item?.restaurant_image;
               return {
                 ...item,
                 dishes: item.dishes.map((itemDish) => {
