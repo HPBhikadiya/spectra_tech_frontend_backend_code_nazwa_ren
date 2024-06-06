@@ -1,22 +1,22 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchCount } from './counterAPI';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { fetchCount } from "./counterAPI";
 
 const initialState = {
-    allRestList: [],
-    favResList: [],
-    token: "",
-    // 1 for customer and 2 for restaurant
-    userType: undefined,
-    resProfile: {},
-    resMenu: [],
-    resOrders: [],
-    customerProfile: {},
-    customerMenu: [],
-    customerOrders: [],
-    selectedRes: null,
-    cart: [],
-    customerSignupSuccessMsg: '',
-    resSignupSuccessMsg: '',
+  allRestList: [],
+  favResList: [],
+  token: "",
+  // 1 for customer and 2 for restaurant
+  userType: undefined,
+  resProfile: {},
+  resMenu: [],
+  resOrders: [],
+  customerProfile: {},
+  customerMenu: [],
+  customerOrders: [],
+  selectedRes: null,
+  cart: [],
+  customerSignupSuccessMsg: "",
+  resSignupSuccessMsg: "",
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -34,42 +34,42 @@ const initialState = {
 // );
 
 export const mainSlice = createSlice({
-  name: 'main',
+  name: "main",
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     onCustomerSignup: (state, action) => {
-      state.customerSignupSuccessMsg= action.payload?.msg;
+      state.customerSignupSuccessMsg = action.payload?.msg;
     },
     onResSignup: (state, action) => {
-      state.resSignupSuccessMsg= action.payload?.msg;
+      state.resSignupSuccessMsg = action.payload?.msg;
     },
     onCustomerLogin: (state, action) => {
       const data = action.payload;
-      state.token= data.token;
+      state.token = data.token;
       state.customerProfile = data;
       state.userType = 1;
     },
     onResLogin: (state, action) => {
       const data = action.payload;
-      state.token= data.token;
+      state.token = data.token;
       state.resProfile = data;
       state.userType = 2;
     },
     onCustomerLogout: (state, action) => {
-      state.token= '';
+      state.token = "";
       state.userType = 0;
       state.cart = [];
-      state.favResList= [];
+      state.favResList = [];
       state.customerProfile = {};
-      state.customerSignupSuccessMsg = '';
+      state.customerSignupSuccessMsg = "";
     },
     onResLogout: (state, action) => {
-      state.token= '';
+      state.token = "";
       state.userType = 0;
       state.resProfile = {};
       state.resMenu = [];
-      state.resSignupSuccessMsg = '';
+      state.resSignupSuccessMsg = "";
     },
     updateResProfile: (state, action) => {
       state.resProfile = action.payload;
@@ -91,43 +91,52 @@ export const mainSlice = createSlice({
     },
     // getCustomersDeliveryAddress
     deleteResFromFavList: (state, action) => {
-      const  { resFavList } = action.payload
+      const { resFavList } = action.payload;
       state.favResList = resFavList;
     },
 
     updateCustomerMenu: (state, action) => {
-        state.customerMenu = action.payload;
+      state.customerMenu = action.payload;
     },
     updateCustomerOrders: (state, action) => {
-        // console.log("customer order", action.payload);
-        state.customerOrders= action.payload;
+      // console.log("customer order", action.payload);
+      state.customerOrders = action.payload;
     },
     cancelCustomerOrder: (state, action) => {
-        const orderList = state.customerOrders;
-        // console.log("orderList", orderList.length);
-        // console.log("action", action.payload);
-        const orderIndex  = orderList.findIndex(o => o._id === action.payload?.order._id);
-        orderList[orderIndex].delivery_status =  7;
-        state.customerOrders = orderList;
+      const orderList = state.customerOrders;
+      // console.log("orderList", orderList.length);
+      // console.log("action", action.payload);
+      const orderIndex = orderList.findIndex(
+        (o) => o._id === action.payload?.order._id
+      );
+      orderList[orderIndex].delivery_status = 7;
+      state.customerOrders = orderList;
     },
     updateResOrders: (state, action) => {
-        state.resOrders= action.payload;
+      state.resOrders = action.payload;
     },
     addDishToCart: (state, action) => {
       const payload = action.payload;
       let cartList = state.cart;
-      const resIndex = cartList.findIndex(res => res._id === payload?.res?._id);
+      const resIndex = cartList.findIndex(
+        (res) => res._id === payload?.res?._id
+      );
       if (resIndex === -1) {
         if (cartList.length >= 1) {
           return alert("Cant select dish from 2 different restaurant in cart");
         }
-        cartList.push({...payload?.res, dishes: [{ ...payload?.dish, quantity: 1}]})
+        cartList.push({
+          ...payload?.res,
+          dishes: [{ ...payload?.dish, quantity: 1 }],
+        });
       } else {
-        const dishIndex= cartList[resIndex].dishes.findIndex(dish => dish._id === payload?.dish?._id);
+        const dishIndex = cartList[resIndex].dishes.findIndex(
+          (dish) => dish._id === payload?.dish?._id
+        );
         if (dishIndex === -1) {
-          cartList[resIndex]?.dishes?.push({...payload?.dish, quantity: 1})
+          cartList[resIndex]?.dishes?.push({ ...payload?.dish, quantity: 1 });
         } else {
-          alert("Dish already added in cart")
+          alert("Dish already added in cart");
         }
       }
       state.cart = cartList;
@@ -136,42 +145,44 @@ export const mainSlice = createSlice({
       const payload = action.payload;
       const { dish } = payload;
       let cartList = state.cart;
-      const resIndex = cartList.findIndex(res => res._id === dish?.res_id);
+      const resIndex = cartList.findIndex((res) => res._id === dish?.res_id);
       if (resIndex !== -1) {
-        const dishIndex= cartList[resIndex].dishes.findIndex(dishItem => dishItem._id === dish?._id);
+        const dishIndex = cartList[resIndex].dishes.findIndex(
+          (dishItem) => dishItem._id === dish?._id
+        );
         if (dishIndex !== -1) {
-          cartList[resIndex].dishes[dishIndex].quantity += 1
+          cartList[resIndex].dishes[dishIndex].quantity += 1;
         }
-
       }
-
     },
     decrementDishCount: (state, action) => {
       const payload = action.payload;
       const { dish } = payload;
       let cartList = state.cart;
-      const resIndex = cartList.findIndex(res => res._id === dish?.res_id);
+      const resIndex = cartList.findIndex((res) => res._id === dish?.res_id);
       if (resIndex !== -1) {
-        const dishIndex= cartList[resIndex].dishes.findIndex(dishItem => dishItem._id === dish?._id);
+        const dishIndex = cartList[resIndex].dishes.findIndex(
+          (dishItem) => dishItem._id === dish?._id
+        );
         if (dishIndex !== -1) {
           if (cartList[resIndex].dishes[dishIndex].quantity !== 1) {
-            cartList[resIndex].dishes[dishIndex].quantity -= 1
+            cartList[resIndex].dishes[dishIndex].quantity -= 1;
           }
         }
-
       }
     },
     removeDishFromCart: (state, action) => {
       const dish = action.payload?.dish;
       console.log("========dish");
       let cartList = state.cart;
-      const resIndex = cartList.findIndex(res => res._id === dish?.res_id);
+      const resIndex = cartList.findIndex((res) => res._id === dish?.res_id);
       if (resIndex !== -1) {
-        const dishIndex= cartList[resIndex].dishes.findIndex(dishItem => dishItem._id === dish?._id);
+        const dishIndex = cartList[resIndex].dishes.findIndex(
+          (dishItem) => dishItem._id === dish?._id
+        );
         if (dishIndex !== -1) {
           cartList[resIndex].dishes.splice(dishIndex, 1);
         }
-
       }
       state.cart = cartList;
     },
@@ -185,32 +196,52 @@ export const mainSlice = createSlice({
       state.cart = [];
     },
     changeToken: (state, action) => {
-        state.token = action.payload;
+      state.token = action.payload;
     },
     selectUserType: (state, action) => {
-        state.userType = action.payload;
-    }
+      state.userType = action.payload;
+    },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
   // including actions generated by createAsyncThunk or in other slices.
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(incrementAsync.pending, (state) => {
-//         state.status = 'loading';
-//       })
-//       .addCase(incrementAsync.fulfilled, (state, action) => {
-//         state.status = 'idle';
-//         state.value += action.payload;
-//       });
-//   },
+  //   extraReducers: (builder) => {
+  //     builder
+  //       .addCase(incrementAsync.pending, (state) => {
+  //         state.status = 'loading';
+  //       })
+  //       .addCase(incrementAsync.fulfilled, (state, action) => {
+  //         state.status = 'idle';
+  //         state.value += action.payload;
+  //       });
+  //   },
 });
 
 export const {
-  onCustomerSignup, onResSignup, onCustomerLogin, onResLogin, onCustomerLogout, onResLogout,
-  updateResProfile, updateCustomerProfile, getResMenu, getAllResList, getFavResList, deleteResFromFavList,
-  changeToken, selectUserType, addDishToCart, clearCart, incrementDishCount, decrementDishCount, removeDishFromCart,
-  addInstructionToCart, updateCustomerMenu, updateCustomerOrders, updateResOrders, cancelCustomerOrder
- } = mainSlice.actions;
+  onCustomerSignup,
+  onResSignup,
+  onCustomerLogin,
+  onResLogin,
+  onCustomerLogout,
+  onResLogout,
+  updateResProfile,
+  updateCustomerProfile,
+  getResMenu,
+  getAllResList,
+  getFavResList,
+  deleteResFromFavList,
+  changeToken,
+  selectUserType,
+  addDishToCart,
+  clearCart,
+  incrementDishCount,
+  decrementDishCount,
+  removeDishFromCart,
+  addInstructionToCart,
+  updateCustomerMenu,
+  updateCustomerOrders,
+  updateResOrders,
+  cancelCustomerOrder,
+} = mainSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
