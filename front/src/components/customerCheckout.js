@@ -74,20 +74,6 @@ const useStyles = makeStyles({
   },
 });
 
-// const useStyles = makeStyles({
-//   //   gridContainer: {
-//   //     display: 'flex',
-//   //     paddingLeft: '40px',
-//   //     paddingRight: '40px',
-//   //     overflow: 'auto',
-//   //     justifyContent: 'start',
-//   //     flexWrap: 'wrap',
-//   //   },
-//   //   container: {
-//   //     marginTop: '160px',
-//   //   },
-// }); 
-
 export default function CustomerCheckout() {
   const mainReducer = useSelector((state) => state.mainReducer);
   const { customerProfile, token, cart = [] } = mainReducer;
@@ -173,7 +159,6 @@ export default function CustomerCheckout() {
       setTotalAmount(defaultTotalAmount);
     }
   };
-  console.log({ taxes, totalAmount });
 
   const resAddress = cart.length > 0 && cart[0].address;
   const pickupAddress = Object.values(resAddress).join(", ");
@@ -259,19 +244,31 @@ export default function CustomerCheckout() {
         console.error(result.error.message);
         alert("Payment failed. Please try again.");
       } else {
+        placeOrder({
+          variables: {
+            customer_id,
+          },
+        });
         // Payment successful
         console.log("Payment succeeded!");
         handleClose(); // Close the dialog
-        dispatch(clearCart());
-        alert(`Your order has been sent to the merchant for preparation. Please confirm your order upon arrival. The merchant has the right to request ID for age verification. If you are above 36 years of age and do not meet our financial assistance criteria, the merchant may cancel your order.`);
+        // dispatch(clearCart());
+        // alert(
+        //   `Your order has been sent to the merchant for preparation. Please confirm your order upon arrival. The merchant has the right to request ID for age verification. If you are above 36 years of age and do not meet our financial assistance criteria, the merchant may cancel your order.`
+        // );
 
-        history.push("/");
+        // history.push("/");
       }
     } catch (error) {
       console.error("Error processing payment:", error);
       alert("Error processing payment. Please try again.");
     }
   };
+
+  if (cart && !cart.length) {
+    history.push("/");
+    return <></>;
+  }
 
   return (
     <>

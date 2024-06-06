@@ -2,6 +2,7 @@ import Customers from "../../Models/customers.js";
 import Orders from "../../Models/orders.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import config from "../../utils/config.js";
 
 const resolvers = {
   Query: {
@@ -160,7 +161,9 @@ const resolvers = {
           // return;
         }
         // console.log("==========about to go");
-        const token = jwt.sign({ email }, "jwt_ubereats", { expiresIn: "2h" });
+        const token = jwt.sign({ email }, config.token_key, {
+          expiresIn: "2h",
+        });
         customer.token = "Bearer " + token;
         await customer.save();
         return customer;

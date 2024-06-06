@@ -25,7 +25,7 @@ router.post("/customer", async (req, res) => {
     if (!match) {
       return res.status(400).json({ msg: "Invalid password" });
     }
-    const token = jwt.sign({ email }, "jwt_ubereats", { expiresIn: "2h" });
+    const token = jwt.sign({ email }, config.token_key, { expiresIn: "2h" });
     customer.token = "Bearer " + token;
     await customer.save();
     return res.status(200).json(customer);

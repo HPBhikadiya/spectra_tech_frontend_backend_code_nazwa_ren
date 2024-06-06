@@ -15,7 +15,7 @@ const verifyToken = (req, res, next) => {
     return res.status(401).end("Sign in to access");
   }
   try {
-    const decoded = jwt.verify(token, config.token_key);
+    const decoded = jwt.verify(token.replace("Bearer ", ""), config.token_key);
     req.user = decoded;
   } catch (err) {
     alert("Invalid Authentication: Your session is expired");
