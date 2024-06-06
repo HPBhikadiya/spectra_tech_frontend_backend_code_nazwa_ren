@@ -14,6 +14,8 @@ const GET_ALL_RES = gql`
       _id
       name
       discount
+      commission
+      methodForOrder
       email
       password
       delivery_option

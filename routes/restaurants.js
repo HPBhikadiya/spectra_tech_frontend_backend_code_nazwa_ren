@@ -45,6 +45,8 @@ router.put("/profile", async (req, res) => {
       res_id,
       name,
       discount,
+      commission,
+      methodForOrder,
       delivery_option,
       phone_number,
       description,
@@ -63,6 +65,8 @@ router.put("/profile", async (req, res) => {
       name,
       delivery_option,
       discount,
+      commission,
+      methodForOrder,
       phone_number,
       description,
       restaurant_image,
@@ -164,7 +168,7 @@ router.delete("/:res_id/dish/:id", async (req, res) => {
     const result = await Restaurants.findByIdAndUpdate(
       res_id,
       { $pull: { dishes: { _id: dish_id } } },
-      { new: true },
+      { new: true }
     );
     return res.status(200).json({ data: result });
   } catch (error) {

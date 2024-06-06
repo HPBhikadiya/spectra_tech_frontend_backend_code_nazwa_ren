@@ -28,7 +28,7 @@ export default function MediaCard(props) {
           position: "relative",
         }}
       >
-        {res.discount && res.discount > 0 && (
+        {res.discount && res.discount > 0 ? (
           <Typography
             style={{
               position: "absolute",
@@ -38,6 +38,8 @@ export default function MediaCard(props) {
           >
             {res.discount} %OFF
           </Typography>
+        ) : (
+          ""
         )}
 
         <CardMedia

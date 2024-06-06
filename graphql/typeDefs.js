@@ -21,6 +21,8 @@ const typeDefs = gql`
     _id: ID!
     name: String!
     discount: Int!
+    commission: Int
+    methodForOrder: String
     email: String!
     password: String!
     delivery_option: Int!
@@ -136,6 +138,8 @@ const typeDefs = gql`
     instruction: String
     token: String
     discount: Int!
+    commission: Int
+    methodForOrder: String
     dishes: [dishCartInput]
   }
   input AddressInput {

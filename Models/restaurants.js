@@ -23,23 +23,32 @@ const dishSchema = new Schema(
   },
   {
     versionKey: false,
-  },
+  }
 );
 
 const restaurantSchema = new Schema(
   {
-    name: { type: String, required: true, trim: true },
-    email: { type: String, required: true, trim: true },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     password: { type: String, required: true, trim: true },
     delivery_option: { type: Number, default: 1 },
     discount: { type: Number, default: 0 },
+    commission: { type: Number, default: 10 },
     phone_number: String,
     description: String,
     timing_open: String,
     timing_close: String,
     restaurant_image: { type: String, default: null },
     have_access: { type: Boolean, default: true },
-
+    methodForOrder: { type: String },
     token: { type: String, default: "" },
     address: {
       street_address: String,
@@ -53,7 +62,7 @@ const restaurantSchema = new Schema(
   },
   {
     versionKey: false,
-  },
+  }
 );
 
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);

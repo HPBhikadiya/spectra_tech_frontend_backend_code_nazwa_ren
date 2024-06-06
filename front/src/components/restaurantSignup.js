@@ -87,12 +87,14 @@ export default function ResSignup() {
   // const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [streetAddress, setStreetAddress] = useState(
-    resProfile?.streetAddress || "",
+    resProfile?.streetAddress || ""
   );
   const [city, setCity] = useState(resProfile?.city || "");
   const [state, setState] = useState(resProfile?.state || "");
   const [country, setCountry] = useState(resProfile?.country || "Canada");
-
+  const [methodForOrder, setMethodForOrder] = useState(
+    resProfile?.methodForOrder || "email"
+  );
   const [zipcode, setZipcode] = useState(resProfile?.zipcode || "");
   const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -232,6 +234,21 @@ export default function ResSignup() {
     },
   ];
 
+  const methodForOrderOption = [
+    {
+      value: "text",
+      label: "Text",
+    },
+    {
+      value: "email",
+      label: "Email",
+    },
+    {
+      value: "both",
+      label: "Both",
+    },
+  ];
+
   useEffect(() => {}, []);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -285,6 +302,8 @@ export default function ResSignup() {
       name,
       street_address: streetAddress,
       city,
+      methodForOrder,
+      commission,
       state,
       zipcode: zipcode,
       country,
@@ -477,6 +496,21 @@ export default function ResSignup() {
               onChange={(e) => setCountry(e.target.value)}
             >
               {countries.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <TextField
+              id="outlined-methodForOrder"
+              select
+              label="methodForOrder"
+              value={methodForOrder}
+              onChange={(e) => setMethodForOrder(e.target.value)}
+              //   helperText="Please select your currency"
+            >
+              {methodForOrderOption.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>

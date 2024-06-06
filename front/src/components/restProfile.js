@@ -77,28 +77,33 @@ export default function ResProfile() {
   const [phone, setPhone] = useState(resProfile?.phone_number || "");
   const [description, setDescription] = useState(resProfile?.description || "");
   const [discount, setDiscount] = useState(resProfile?.discount || 0);
+  const [commission, setCommission] = useState(resProfile?.commission || 10);
+
   const [streetAddress, setStreetAddress] = useState(
-    resProfile?.address?.street_address || "",
+    resProfile?.address?.street_address || ""
   );
   const [aptNumber, setAptNumber] = useState(
-    resProfile?.address?.apt_number || "",
+    resProfile?.address?.apt_number || ""
   );
   const [city, setCity] = useState(resProfile?.address?.city || "san jose");
   const [state, setState] = useState(
-    resProfile?.address?.state || "california",
+    resProfile?.address?.state || "california"
   );
   const [country, setCountry] = useState(
-    resProfile?.address?.country || "united states",
+    resProfile?.address?.country || "united states"
+  );
+  const [methodForOrder, setMethodForOrder] = useState(
+    resProfile?.methodForOrder || "email"
   );
   const [zipcode, setZipcode] = useState(
-    resProfile?.address?.zipcode || "95111",
+    resProfile?.address?.zipcode || "95111"
   );
   const [timingOpen, setTimingOpen] = useState(resProfile?.timing_open || "");
   const [timingClose, setTimingClose] = useState(
-    resProfile?.timing_close || "",
+    resProfile?.timing_close || ""
   );
   const [deliveryOptions, setDeliveryOptions] = useState(
-    resProfile?.delivery_option,
+    resProfile?.delivery_option
   );
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(resProfile?.image || "");
@@ -230,6 +235,21 @@ export default function ResProfile() {
     },
   ];
 
+  const methodForOrderOption = [
+    {
+      value: "text",
+      label: "Text",
+    },
+    {
+      value: "email",
+      label: "Email",
+    },
+    {
+      value: "both",
+      label: "Both",
+    },
+  ];
+
   const deliveryOptionList = [
     {
       value: 2,
@@ -288,6 +308,8 @@ export default function ResProfile() {
       city: city,
       state: state,
       country: country,
+      methodForOrder,
+      commission,
       zipcode: zipcode,
       isAddressUpdated: true,
       restaurant_image: imageUrl,
@@ -427,6 +449,36 @@ export default function ResProfile() {
                 },
               }}
             />
+
+            <TextField
+              variant="outlined"
+              margin="normal"
+              inputRef={{ ...register("commission") }}
+              fullWidth
+              id="commission"
+              label="commission"
+              name="commission"
+              type="number"
+              value={commission}
+              onChange={(e) => {
+                if (e.target.value >= 0 && e.target.value <= 100) {
+                  setCommission(e.target.value);
+                }
+              }}
+              autoFocus
+              inputProps={{
+                className: classes.textInput,
+                min: 0,
+                max: 100,
+                step: 1,
+                pattern: "\\d*",
+                onKeyDown: (e) => {
+                  if (e.key === "." || e.key === "-") {
+                    e.preventDefault();
+                  }
+                },
+              }}
+            />
             <TextField
               variant="outlined"
               margin="normal"
@@ -535,6 +587,20 @@ export default function ResProfile() {
               //   helperText="Please select your currency"
             >
               {countries.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              id="outlined-methodForOrder"
+              select
+              label="methodForOrder"
+              value={methodForOrder}
+              onChange={(e) => setMethodForOrder(e.target.value)}
+              //   helperText="Please select your currency"
+            >
+              {methodForOrderOption.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
