@@ -26,6 +26,7 @@ import {
   CardContent,
   List,
   ListItem,
+  Input,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
@@ -54,30 +55,47 @@ import { Elements } from "@stripe/react-stripe-js";
 import PaymentForm from "./PaymentForm";
 
 const stripePromise = loadStripe(
-  "pk_test_51PD8wPGEpr3f403gfUpeHIf1hqpuU85b9lTXiPbFtRiWgE1DrlIWJXXmX47HTfKOvAqo2vgTwFTH2LUv6n6WY7KS00qeft1Nhu",
+  "pk_test_51PD8cpRo4zop4imPXn95d2zs640As1oPUnnljgdrbZpODsw7H8OP2tSpVF35urTvvWBkEakSvmeJ0A2Br6UzT59g00mKgQ8A9d"
 );
 
 const useStyles = makeStyles({
-  //   gridContainer: {
-  //     display: 'flex',
-  //     paddingLeft: '40px',
-  //     paddingRight: '40px',
-  //     overflow: 'auto',
-  //     justifyContent: 'start',
-  //     flexWrap: 'wrap',
-  //   },
-  //   container: {
-  //     marginTop: '160px',
-  //   },
+  input: {
+    "& input[type=number]": {
+      "-moz-appearance": "textfield",
+    },
+    "& input[type=number]::-webkit-outer-spin-button": {
+      "-webkit-appearance": "none",
+      margin: 0,
+    },
+    "& input[type=number]::-webkit-inner-spin-button": {
+      "-webkit-appearance": "none",
+      margin: 0,
+    },
+  },
 });
+
+// const useStyles = makeStyles({
+//   //   gridContainer: {
+//   //     display: 'flex',
+//   //     paddingLeft: '40px',
+//   //     paddingRight: '40px',
+//   //     overflow: 'auto',
+//   //     justifyContent: 'start',
+//   //     flexWrap: 'wrap',
+//   //   },
+//   //   container: {
+//   //     marginTop: '160px',
+//   //   },
+// }); 
 
 export default function CustomerCheckout() {
   const mainReducer = useSelector((state) => state.mainReducer);
   const { customerProfile, token, cart = [] } = mainReducer;
   const [deliveryAddressList, setDeliveryAddressList] = useState(
-    customerProfile.delivery_addresses || [],
+    customerProfile.delivery_addresses || []
   );
   const [selectedAddress, setSelectedAddress] = useState();
+  const [tip, setTip] = useState(0);
   const [newAddess, setNewAddess] = useState();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
@@ -138,12 +156,24 @@ export default function CustomerCheckout() {
   }
 
   const deliveryFee = 0.0;
-  const taxes = (subTotalAmount * 14.975) / 100;
+  const taxes = parseFloat(((subTotalAmount * 14.975) / 100).toFixed(2));
   // const taxes = (subTotalAmount * 14.975) / 100;
-  console.log({ taxes, subTotalAmount });
-  // console.log({ taxes, subTotalAmount });
-  const totalAmount = deliveryFee * cart.length + taxes + subTotalAmount;
+  const defaultTotalAmount = deliveryFee * cart.length + taxes + subTotalAmount;
+  const [totalAmount, setTotalAmount] = useState(defaultTotalAmount);
+
   const isPickupOnlyRes = cart.length > 0 && cart[0]?.delivery_option === 3;
+
+  const onChangeTip = (tipValue) => {
+    if (tipValue) {
+      setTip(tipValue);
+      const totalAmountAfterTip = (defaultTotalAmount * tipValue) / 100;
+      setTotalAmount(defaultTotalAmount + totalAmountAfterTip);
+    } else {
+      setTip(0);
+      setTotalAmount(defaultTotalAmount);
+    }
+  };
+  console.log({ taxes, totalAmount });
 
   const resAddress = cart.length > 0 && cart[0].address;
   const pickupAddress = Object.values(resAddress).join(", ");
@@ -181,9 +211,16 @@ export default function CustomerCheckout() {
       order_date_time: new Date().toISOString(),
       amount: parseFloat(totalAmount.toFixed(2)),
       delivery_fee: deliveryFee,
-      taxes: 0,
+      taxes,
       instruction: cart[0]?.instruction,
-      tip: 0,
+      amount_details: {
+        tip,
+      },
+      description: {
+        tip: tip,
+        subTotalAmount,
+        tax: taxes,
+      },
     };
 
     try {
@@ -195,7 +232,7 @@ export default function CustomerCheckout() {
           headers: {
             Authorization: token,
           },
-        },
+        }
       );
 
       // Assuming the response from your backend includes the client secret for the PaymentIntent
@@ -226,6 +263,8 @@ export default function CustomerCheckout() {
         console.log("Payment succeeded!");
         handleClose(); // Close the dialog
         dispatch(clearCart());
+        alert(`Your order has been sent to the merchant for preparation. Please confirm your order upon arrival. The merchant has the right to request ID for age verification. If you are above 36 years of age and do not meet our financial assistance criteria, the merchant may cancel your order.`);
+
         history.push("/");
       }
     } catch (error) {
@@ -451,6 +490,112 @@ export default function CustomerCheckout() {
               {`$ ${taxes}`}
             </Typography>
           </div>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingTop: 10,
+              paddingBottom: 0,
+            }}
+          >
+            <div>
+              <Typography
+                variant="body1"
+                color="black"
+                style={{ alignSelf: "center", textAlign: "center" }}
+              >
+                Tip:
+              </Typography>
+            </div>
+            <div
+              style={{
+                width: "80%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Typography
+                variant="body1"
+                color="black"
+                style={{
+                  alignSelf: "center",
+                  textAlign: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  onChangeTip("15");
+                }}
+              >
+                15% &nbsp;
+              </Typography>
+              <Typography
+                variant="body1"
+                color="black"
+                style={{
+                  alignSelf: "center",
+                  textAlign: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  onChangeTip("18");
+                }}
+              >
+                18% &nbsp;
+              </Typography>
+              <Typography
+                variant="body1"
+                color="black"
+                style={{
+                  alignSelf: "center",
+                  textAlign: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  onChangeTip("20");
+                }}
+              >
+                20% &nbsp;
+              </Typography>
+              <Typography
+                variant="body1"
+                color="black"
+                style={{
+                  alignSelf: "center",
+                  textAlign: "center",
+                  // width: "fit-content",
+                  width: "15%",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Input
+                  type="number"
+                  value={tip}
+                  onChange={(e) => {
+                    if (e.target.value >= 0 && e.target.value <= 100) {
+                      onChangeTip(e.target.value.replace(/^0+/, ""));
+                    }
+                  }}
+                  className={classes.input}
+                  // inputProps={{
+                  //   min: -1,
+                  //   max: 100,
+                  //   step: 1,
+                  //   pattern: "\\d*",
+                  //   onKeyDown: (e) => {
+                  //     if (e.key === "." || e.key === "-") {
+                  //       e.preventDefault();
+                  //     }
+                  //   },
+                  // }}
+                ></Input>
+                %
+              </Typography>
+            </div>
+          </div>
+          “100% of tips will go to the Restaurant”
           <div
             style={{
               width: "100%",

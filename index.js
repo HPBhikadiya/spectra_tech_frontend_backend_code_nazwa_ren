@@ -113,7 +113,7 @@ app.post("/upload_image", upload.single("file"), (req, res) => {
 
 import stripe from "stripe";
 const stripeSecretKey =
-  "sk_test_51PD8wPGEpr3f403gWH7pshof2l5NaWjH8G8qfKoHyFPpvoFyMeIBgh4hHt3YRSLdEkNZSaavLHwAlgSlxJ4CYyPF00wBYkHRdj";
+  "sk_test_51PD8cpRo4zop4imPXDtVFXep45y6UxxTj2hMnGg2q1AxCQsFAeCeWOjau6R6veGdQWI10Be0s63X1jJLiMW9jvRg0046uf52YC";
 const stripeClient = new stripe(stripeSecretKey);
 // Use of another path to see results for js_refresher.js
 app.post("/process-payment", async (req, res) => {
@@ -123,7 +123,7 @@ app.post("/process-payment", async (req, res) => {
     // Create a PaymentIntent
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount,
-      currency: "usd",
+      currency: "cad",
       payment_method: payment_method, // This should be a valid payment method ID or token
       confirm: true, // Confirm the PaymentIntent immediately
     });
