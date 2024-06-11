@@ -139,6 +139,7 @@ const typeDefs = gql`
     token: String
     discount: Int!
     commission: Int
+    restaurant_image: String
     methodForOrder: String
     dishes: [dishCartInput]
   }
