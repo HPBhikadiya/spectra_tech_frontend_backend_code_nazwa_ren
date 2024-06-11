@@ -109,7 +109,7 @@ export const mainSlice = createSlice({
       const orderIndex = orderList.findIndex(
         (o) => o._id === action.payload?.order._id
       );
-      orderList[orderIndex].delivery_status = 7;
+      orderList[orderIndex].delivery_status = 4;
       state.customerOrders = orderList;
     },
     updateResOrders: (state, action) => {

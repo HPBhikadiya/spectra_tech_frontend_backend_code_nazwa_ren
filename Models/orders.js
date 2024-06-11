@@ -21,7 +21,7 @@ const orderItemSchema = new Schema(
   },
   {
     versionKey: false,
-  },
+  }
 );
 
 const orderSchema = new Schema(
@@ -34,6 +34,10 @@ const orderSchema = new Schema(
     customer_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customer",
+    },
+    rateId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "rate",
     },
     first_name: String,
     last_name: String,
@@ -51,7 +55,7 @@ const orderSchema = new Schema(
   },
   {
     versionKey: false,
-  },
+  }
 );
 
 const Order = mongoose.model("Order", orderSchema);

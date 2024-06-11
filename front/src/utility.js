@@ -17,12 +17,12 @@ export const random = (min, max) => {
 
 export const getOrderStatus = (num) => {
   const options = [
-    "recieved",
+    "Received",
     "preparing",
-    "on the way",
-    "delivered",
-    "pickup_ready",
-    "picked_up",
+    // "on the way",
+    "Done",
+    // "pickup_ready",
+    // "picked_up",
     "cancelled",
   ];
   return options[num - 1];

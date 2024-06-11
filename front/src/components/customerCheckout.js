@@ -56,7 +56,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import PaymentForm from "./PaymentForm";
 
 const stripePromise = loadStripe(
-  "pk_test_51PD8cpRo4zop4imPXn95d2zs640As1oPUnnljgdrbZpODsw7H8OP2tSpVF35urTvvWBkEakSvmeJ0A2Br6UzT59g00mKgQ8A9d"
+  "pk_test_51PD8wPGEpr3f403gfUpeHIf1hqpuU85b9lTXiPbFtRiWgE1DrlIWJXXmX47HTfKOvAqo2vgTwFTH2LUv6n6WY7KS00qeft1Nhu"
 );
 
 const useStyles = makeStyles({
@@ -261,7 +261,6 @@ export default function CustomerCheckout() {
             instruction: cart[0]?.instruction,
             tip,
             cart: cart.map((item) => {
-              delete item?.restaurant_image;
               return {
                 ...item,
                 dishes: item.dishes.map((itemDish) => {

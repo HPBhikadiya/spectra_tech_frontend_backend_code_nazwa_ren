@@ -1,5 +1,6 @@
 import restaurantsResolvers from "./restaurants.js";
 import customersResolvers from "./customers.js";
+import rateResolvers from "./rate.js";
 
 const resolvers = {
   Query: {
@@ -9,6 +10,7 @@ const resolvers = {
   Mutation: {
     ...customersResolvers.Mutation,
     ...restaurantsResolvers.Mutation,
+    ...rateResolvers.Mutation,
   },
 };
 

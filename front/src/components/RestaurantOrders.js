@@ -91,9 +91,9 @@ export default function CustomerOrders(props) {
   useEffect(() => {
     const orderDict = {
       0: [1, 2, 3, 4, 5, 6, 7],
-      1: [1, 2, 3, 5],
-      2: [4, 6],
-      3: [7],
+      1: [1,2],
+      2: [3],
+      3: [4],
     };
     let allowedStatus = orderDict[parseInt(orderFilter)];
     setListOnDisplay(
@@ -192,7 +192,7 @@ export default function CustomerOrders(props) {
     delivery_status,
     delivery_type
   ) => {
-    if (parseInt(delivery_status) === 7) {
+    if (parseInt(delivery_status) === 4) {
       return;
     }
     const url = `/restaurants/order`;
@@ -249,7 +249,7 @@ export default function CustomerOrders(props) {
     const body = {
       res_id,
       order_id,
-      delivery_status: 7,
+      delivery_status: 4,
     };
 
     try {
@@ -352,7 +352,7 @@ export default function CustomerOrders(props) {
                   <Typography
                     variant="body2"
                     style={{
-                      color: order?.delivery_status === 7 ? "red" : "green",
+                      color: order?.delivery_status === 4 ? "red" : "green",
                       textAlign: "center",
                     }}
                   >
@@ -398,25 +398,27 @@ export default function CustomerOrders(props) {
                   >
                     View Reciept
                   </Button>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    style={{
-                      marginLeft: 20,
-                      backgroundColor: "black",
-                      color: "white",
-                    }}
-                    onClick={() =>
-                      updateOrderStatusApi(
-                        order?._id,
-                        order?.delivery_status,
-                        order?.delivery_type
-                      )
-                    }
-                  >
-                    Move to Next status
-                  </Button>
-                  {[1, 2, 3, 5].includes(order?.delivery_status) && (
+                  {[1, 2].includes(order?.delivery_status) && (
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      style={{
+                        marginLeft: 20,
+                        backgroundColor: "black",
+                        color: "white",
+                      }}
+                      onClick={() =>
+                        updateOrderStatusApi(
+                          order?._id,
+                          order?.delivery_status,
+                          order?.delivery_type
+                        )
+                      }
+                    >
+                      Move to Next status
+                    </Button>
+                  )}
+                  {[1].includes(order?.delivery_status) && (
                     <Button
                       size="small"
                       variant="outlined"

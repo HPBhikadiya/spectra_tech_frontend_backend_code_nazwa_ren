@@ -35,6 +35,18 @@ const typeDefs = gql`
     address: Address
     dishes: [Dish!]!
   }
+
+  type Rate {
+    _id: ID!
+    orderId: String!
+    restaurantId: String!
+    # orderId: [Order]!
+    # restaurantId: [Restaurant]!
+    rateCount: Float!
+    customerId: String!
+    feedback: String
+  }
+
   type Delivery_address {
     delivery_address: String!
   }
@@ -76,6 +88,7 @@ const typeDefs = gql`
     instruction: String
     total_amount: Float
     order_items: [OrderItem]
+    # rateId: [Rate]
   }
 
   type OrderItem {
@@ -214,11 +227,20 @@ const typeDefs = gql`
     pageSize: Int
   }
 
+  input AddRatingToOrderInput {
+    orderId: String!
+    restaurantId: String!
+    rateCount: Float!
+    customerId: String!
+    feedback: String
+  }
+
   type Query {
     getRestaurants(customer_city: String, search: String): [Restaurant]
     getCustomerProfile(id: ID!): Customer!
     getCustomerOrders(id: ID!, page: Int, pageSize: Int): OrderOutputWithPage
   }
+
   type Mutation {
     updateCustomerProfile(customerInput: CustomerInput!): Customer!
     placeOrder(placeOrderInput: PlaceOrderInput!): Order!
@@ -235,6 +257,7 @@ const typeDefs = gql`
       order_id: String!
       delivery_status: Int!
     ): [Order]
+    addRatingToOrder(addRatingToOrderInput: AddRatingToOrderInput!): Rate!
   }
 `;
 

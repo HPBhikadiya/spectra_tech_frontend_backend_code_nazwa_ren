@@ -61,6 +61,11 @@ import { capsStrFirstChar, getOrderStatus } from "../utility";
 import ResDishCard from "./ResDishCard";
 import CartDialog from "./CartDialog";
 import { GET_CUSTOMER_ORDERS } from "../graphql/queries";
+import FrownIcon from "@rsuite/icons/legacy/FrownO";
+import MehIcon from "@rsuite/icons/legacy/MehO";
+import SmileIcon from "@rsuite/icons/legacy/SmileO";
+import { Rate } from "rsuite";
+import { ADD_RATING_TO_ORDER } from "../graphql/mutation";
 
 const useStyles = makeStyles({
   gridContainer: {
@@ -77,6 +82,78 @@ const useStyles = makeStyles({
 });
 
 export default function CustomerOrders(props) {
+  const renderCharacter = (value, index, order) => {
+    // unselected character
+    if (value < index + 1) {
+      return <MehIcon />;
+    }
+    if (value < 3) {
+      return (
+        <FrownIcon
+          style={{ color: "#99A9BF" }}
+          onClick={() => {
+            addRatingToOrder({
+              variables: {
+                orderId: order._id,
+                restaurantId: order.res_id,
+                rateCount: value,
+                customerId: customer_id,
+                feedback: "",
+              },
+            });
+          }}
+        />
+      );
+    }
+    if (value < 4) {
+      return (
+        <MehIcon
+          style={{ color: "#F4CA1D" }}
+          onClick={() => {
+            addRatingToOrder({
+              variables: {
+                orderId: order._id,
+                restaurantId: order.res_id,
+                customerId: customer_id,
+                rateCount: value,
+                feedback: "",
+              },
+            });
+          }}
+        />
+      );
+    }
+    return (
+      <SmileIcon
+        style={{ color: "#ff9800" }}
+        onClick={() => {
+          addRatingToOrder({
+            variables: {
+              orderId: order._id,
+              restaurantId: order.res_id,
+              customerId: customer_id,
+              rateCount: value,
+              feedback: "",
+            },
+          });
+        }}
+      />
+    );
+  };
+
+  const [addRatingToOrder] = useMutation(ADD_RATING_TO_ORDER, {
+    onCompleted(res) {
+      console.log("da", res);
+      handleClose();
+      alert("Thank you for your feedback.");
+      dispatch(clearCart());
+      history.push("/");
+    },
+    onError(e) {
+      console.log("--dfd", e);
+    },
+  });
+
   const mainReducer = useSelector((state) => state.mainReducer);
   const [selectedOrder, setSelectedOrder] = useState({});
   const [selectedOrderDetails, setSelectedOrderDetails] = useState([]);
@@ -99,12 +176,21 @@ export default function CustomerOrders(props) {
       parseInt(orderFilter) === 0
         ? [1, 2, 3, 4, 5, 6, 7]
         : parseInt(orderFilter) === 1
-          ? [1, 2, 3, 5]
-          : [4, 6, 7];
+        ? [1, 2, 3, 5]
+        : [4, 6, 7];
+    const tmpData = customerOrders?.filter((order) =>
+      allowedStatus.includes(order.delivery_status)
+    );
     setListOnDisplay(
-      customerOrders?.filter((order) =>
-        allowedStatus.includes(order.delivery_status),
-      ),
+      tmpData.map((item) => {
+        return {
+          ...item,
+          rate: {
+            count: tmpData.rateId?.rateCount,
+            provided: true,
+          },
+        };
+      })
     );
   }, [customerOrders, orderFilter]);
   const history = useHistory();
@@ -226,7 +312,7 @@ export default function CustomerOrders(props) {
     const body = {
       res_id,
       order_id,
-      delivery_status: 7,
+      delivery_status: 4,
     };
 
     try {
@@ -344,13 +430,13 @@ export default function CustomerOrders(props) {
                   <Typography
                     variant="body2"
                     style={
-                      order?.delivery_status === 7
+                      order?.delivery_status === 4
                         ? { color: "red" }
                         : { color: "green" }
                     }
                   >
                     {capsStrFirstChar(
-                      `${getOrderStatus(order?.delivery_status)}`,
+                      `${getOrderStatus(order?.delivery_status)}`
                     )}
                   </Typography>
                 </div>
@@ -368,7 +454,9 @@ export default function CustomerOrders(props) {
                     color="black"
                     style={{ fontSize: 11, marginBottom: 3 }}
                   >
-                    {`${moment(order.order_date_time).format("yyyy-MM-DD ddd hh:mm:ss")} `}
+                    {`${moment(order.order_date_time).format(
+                      "yyyy-MM-DD ddd hh:mm:ss"
+                    )} `}
                   </Typography>
                   <Typography
                     variant="caption"
@@ -397,7 +485,7 @@ export default function CustomerOrders(props) {
                 >
                   View Reciept
                 </Button>
-                {order.delivery_status === 1 && (
+                {order.delivery_status === 1 ? (
                   <Button
                     size="small"
                     variant="text"
@@ -417,6 +505,20 @@ export default function CustomerOrders(props) {
                   >
                     Cancel Order
                   </Button>
+                ) : order.delivery_status === 3 ? (
+                  <>
+                    <div>
+                      <Rate
+                        defaultValue={5}
+                        renderCharacter={(value, index) => {
+                          return renderCharacter(value, index, order);
+                        }}
+                        onChangeActive={(value, event) => {}}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  ""
                 )}
               </Card>
             </ListItem>

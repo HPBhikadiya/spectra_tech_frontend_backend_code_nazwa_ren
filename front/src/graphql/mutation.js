@@ -390,6 +390,32 @@ const UPDATE_PROFILE = gql`
   }
 `;
 
+const ADD_RATING_TO_ORDER = gql`
+  mutation mutation(
+    $orderId: String!
+    $restaurantId: String!
+    $rateCount: Float!
+    $customerId: String!
+    $feedback: String
+  ) {
+    addRatingToOrder(
+      addRatingToOrderInput: {
+        orderId: $orderId
+        restaurantId: $restaurantId
+        rateCount: $rateCount
+        customerId: $customerId
+        feedback: $feedback
+      }
+    ) {
+      orderId
+      restaurantId
+      rateCount
+      customerId
+      feedback
+    }
+  }
+`;
+
 export {
   UPDATE_ORDER_STATUS,
   PLACE_ORDER,
@@ -402,4 +428,5 @@ export {
   RESTAURANT_LOGIN,
   CUSTOMER_SIGNUP,
   UPDATE_PROFILE,
+  ADD_RATING_TO_ORDER,
 };
