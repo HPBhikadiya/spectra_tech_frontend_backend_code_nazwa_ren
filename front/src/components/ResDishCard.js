@@ -72,7 +72,7 @@ export default function MediaCard(props) {
               ${dish.dish_price || "5.00"}
             </Typography>
             &nbsp;
-            {res.discount && res.discount > 0 && (
+            {res.discount && res.discount > 0 ? (
               <>
                 <Typography
                   variant="body3"
@@ -81,9 +81,13 @@ export default function MediaCard(props) {
                     textDecoration: "none",
                   }}
                 >
-                  ${(dish.dish_price * res.discount) / 100 || "5.00"}
+                  $
+                  {dish.dish_price - (dish.dish_price * res.discount) / 100 ||
+                    "5.00"}
                 </Typography>
               </>
+            ) : (
+              ""
             )}
           </Box>
         </CardContent>

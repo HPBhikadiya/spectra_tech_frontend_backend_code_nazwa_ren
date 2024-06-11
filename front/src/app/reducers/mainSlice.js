@@ -132,10 +132,12 @@ export const mainSlice = createSlice({
             dishes: [
               {
                 ...payload.dish,
-                dish_price: (
-                  (payload.dish.dish_price * payload.res.discount) /
-                  100
-                ).toFixed(2),
+                dish_price: payload.res.discount
+                  ? (
+                      payload.dish.dish_price -
+                      (payload.dish.dish_price * payload.res.discount) / 100
+                    ).toFixed(2)
+                  : payload.dish.dish_price,
                 quantity: 1,
               },
             ],
@@ -149,10 +151,12 @@ export const mainSlice = createSlice({
           if (payload) {
             cartList[resIndex]?.dishes?.push({
               ...payload.dish,
-              dish_price: (
-                (payload.dish.dish_price * payload.res.discount) /
-                100
-              ).toFixed(2),
+              dish_price: payload.res.discount
+                ? (
+                    payload.dish.dish_price -
+                    (payload.dish.dish_price * payload.res.discount) / 100
+                  ).toFixed(2)
+                : payload.dish.dish_price,
               quantity: 1,
             });
           }
