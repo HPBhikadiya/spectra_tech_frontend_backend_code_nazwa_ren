@@ -303,7 +303,6 @@ export default function ResSignup() {
       street_address: streetAddress,
       city,
       methodForOrder,
-      commission,
       state,
       zipcode: zipcode,
       country,
