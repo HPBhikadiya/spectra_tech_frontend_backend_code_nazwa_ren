@@ -39,12 +39,12 @@ The merchant has the right to request ID for age verification. If you are above 
 
 👉 Merchant will then be notified through their selected method of the order made. 👈
 
-👉 For each order, Merchant has 2 options: “Cancel” or “Fulfilled” 👈
+✅ For each order, Merchant has 2 options: “Cancel” or “Fulfilled” ✅
 
-Merchants have option to cancel order and state reason for cancellation. 👈
-Fulfilled means the service has been fully completed. 👈
+Merchants have option to cancel order and state reason for cancellation. ✅
+Fulfilled means the service has been fully completed. ✅
 
-Once order is Fulfilled, Customers can “Rate Restaurant” on their orders page. Each Merchant should have a rating out of 5 stars and number of ratings (312) next to it. 👈
+Once order is Fulfilled, Customers can “Rate Restaurant” on their orders page. Each Merchant should have a rating out of 5 stars and number of ratings (312) next to it. ✅
 
 the text looks long but its just the explication
 

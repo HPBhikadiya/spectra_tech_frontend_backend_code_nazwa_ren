@@ -112,6 +112,15 @@ export const mainSlice = createSlice({
       orderList[orderIndex].delivery_status = 4;
       state.customerOrders = orderList;
     },
+    addRatingToCustomerOrder: (state, action) => {
+      const orderList = state.customerOrders;
+
+      const orderIndex = orderList.findIndex(
+        (o) => o._id === action.payload?.orderId
+      );
+      orderList[orderIndex].rateId = action.payload;
+      state.customerOrders = orderList;
+    },
     updateResOrders: (state, action) => {
       state.resOrders = action.payload;
     },
@@ -265,6 +274,7 @@ export const {
   updateCustomerMenu,
   updateCustomerOrders,
   updateResOrders,
+  addRatingToCustomerOrder,
   cancelCustomerOrder,
 } = mainSlice.actions;
 

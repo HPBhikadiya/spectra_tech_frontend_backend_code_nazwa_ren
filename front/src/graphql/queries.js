@@ -82,7 +82,14 @@ const GET_CUSTOMER_ORDERS = gql`
         delivery_date_time
         delivery_address
         delivery_status
-        # rateId
+        rateId {
+          _id
+          orderId
+          restaurantId
+          rateCount
+          customerId
+          feedback
+        }
         delivery_fee
         taxes
         tip

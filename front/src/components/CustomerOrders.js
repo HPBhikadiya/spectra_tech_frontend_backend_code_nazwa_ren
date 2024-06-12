@@ -52,6 +52,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Navigationbar from "./navigationbar";
 import {
   addDishToCart,
+  addRatingToCustomerOrder,
   cancelCustomerOrder,
   getAllResList,
   updateCustomerOrders,
@@ -140,14 +141,16 @@ export default function CustomerOrders(props) {
       />
     );
   };
+  const [page, setPage] = useState(1);
 
   const [addRatingToOrder] = useMutation(ADD_RATING_TO_ORDER, {
     onCompleted(res) {
-      console.log("da", res);
-      handleClose();
+      // let page_number = page;
+      // getCustomersOrders(page_number - 1, pageSize);
+      console.log(res, "*************");
+      dispatch(addRatingToCustomerOrder(res.addRatingToOrder));
+
       alert("Thank you for your feedback.");
-      dispatch(clearCart());
-      history.push("/");
     },
     onError(e) {
       console.log("--dfd", e);
@@ -160,12 +163,10 @@ export default function CustomerOrders(props) {
   const [open, setOpen] = useState(false);
   const [orderFilter, setOrderFilter] = useState("0");
   const [listOnDisplay, setListOnDisplay] = useState([]);
-  const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
   const { customerProfile, token, cart = [], customerOrders } = mainReducer;
   const customer_id = customerProfile._id;
-
   const dispatch = useDispatch();
   useEffect(() => {
     //   getCustomersOrders();
@@ -182,16 +183,21 @@ export default function CustomerOrders(props) {
       allowedStatus.includes(order.delivery_status)
     );
     setListOnDisplay(
-      tmpData.map((item) => {
-        return {
-          ...item,
-          rate: {
-            count: tmpData.rateId?.rateCount,
-            provided: true,
-          },
-        };
-      })
+      customerOrders?.filter((order) =>
+        allowedStatus.includes(order.delivery_status)
+      )
     );
+    // setListOnDisplay(
+    //   tmpData.map((item) => {
+    //     return {
+    //       ...item,
+    //       rate: {
+    //         count: item.rateId?.rateCount || 0,
+    //         provided: item.rateId ? true : false,
+    //       },
+    //     };
+    //   })
+    // );
   }, [customerOrders, orderFilter]);
   const history = useHistory();
   const classes = useStyles();
@@ -509,11 +515,11 @@ export default function CustomerOrders(props) {
                   <>
                     <div>
                       <Rate
-                        defaultValue={5}
+                        defaultValue={order.rateId ? order.rateId.rateCount : 0}
                         renderCharacter={(value, index) => {
                           return renderCharacter(value, index, order);
                         }}
-                        onChangeActive={(value, event) => {}}
+                        disabled={order.rateId ? true : false}
                       />
                     </div>
                   </>

@@ -391,7 +391,7 @@ const UPDATE_PROFILE = gql`
 `;
 
 const ADD_RATING_TO_ORDER = gql`
-  mutation mutation(
+  mutation addRatingToOrder(
     $orderId: String!
     $restaurantId: String!
     $rateCount: Float!

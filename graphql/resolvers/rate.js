@@ -34,7 +34,6 @@ const resolvers = {
           rateId: rate._id.toString(),
         });
 
-        console.log({ rate });
         return rate;
       } catch (error) {
         console.log(error);

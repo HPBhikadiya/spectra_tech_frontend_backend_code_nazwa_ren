@@ -88,7 +88,7 @@ const typeDefs = gql`
     instruction: String
     total_amount: Float
     order_items: [OrderItem]
-    # rateId: [Rate]
+    rateId: Rate
   }
 
   type OrderItem {
