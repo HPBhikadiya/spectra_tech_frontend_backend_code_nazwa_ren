@@ -259,7 +259,7 @@ export default function CustomerCheckout() {
             delivery_fee: deliveryFee,
             taxes,
             instruction: cart[0]?.instruction,
-            tip,
+            tip: parseFloat(20),
             cart: cart.map((item) => {
               return {
                 ...item,

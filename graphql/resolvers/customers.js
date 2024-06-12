@@ -1,8 +1,10 @@
 import Customers from "../../Models/customers.js";
 import Orders from "../../Models/orders.js";
+import RestaurantModel from "../../Models/restaurants.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import config from "../../utils/config.js";
+import { sendMessageTwilio } from "../../utils/twilio.js";
 
 const resolvers = {
   Query: {
@@ -132,6 +134,21 @@ const resolvers = {
           order_items,
         };
 
+        const restaurant = await RestaurantModel.findById(orderPayload.res_id);
+
+        if (!restaurant) {
+          throw new Error("restaurant not found");
+        }
+        if (
+          restaurant.notificationMode === "TEXT" ||
+          restaurant.notificationMode === "BOTH"
+        ) {
+          await sendMessageTwilio({
+            to: restaurant.phone_number,
+          }).catch(async (error) => {
+            console.log(error);
+          });
+        }
         const order = new Orders({ ...orderPayload });
         const savedOrder = await order.save();
         return savedOrder;

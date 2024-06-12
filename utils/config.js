@@ -6,6 +6,9 @@ const config = {
   bucketRegion: "us-east-2",
   awsAccessKey: "xxxxxxxx",
   awsSecretKey: "xxxxxxxxx",
+  twilioSID: "AC2ca4b3790edd496af34047608ebdc973",
+  twilioAuthToken: "6de01d1195513ecddb0a3769fdc089c7",
+  twilioPhoneNumber: "+12256865869"
 };
 
 export default config;
