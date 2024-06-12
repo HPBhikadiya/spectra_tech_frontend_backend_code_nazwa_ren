@@ -92,8 +92,8 @@ export default function ResProfile() {
   const [country, setCountry] = useState(
     resProfile?.address?.country || "united states"
   );
-  const [methodForOrder, setMethodForOrder] = useState(
-    resProfile?.methodForOrder || "email"
+  const [notificationMode, setNotificationMode] = useState(
+    resProfile?.notificationMode || "EMAIL"
   );
   const [zipcode, setZipcode] = useState(
     resProfile?.address?.zipcode || "95111"
@@ -235,17 +235,17 @@ export default function ResProfile() {
     },
   ];
 
-  const methodForOrderOption = [
+  const notificationModeOption = [
     {
-      value: "text",
+      value: "TEXT",
       label: "Text",
     },
     {
-      value: "email",
+      value: "EMAIL",
       label: "Email",
     },
     {
-      value: "both",
+      value: "BOTH",
       label: "Both",
     },
   ];
@@ -308,7 +308,7 @@ export default function ResProfile() {
       city: city,
       state: state,
       country: country,
-      methodForOrder,
+      notificationMode,
       commission,
       zipcode: zipcode,
       isAddressUpdated: true,
@@ -593,14 +593,14 @@ export default function ResProfile() {
               ))}
             </TextField>
             <TextField
-              id="outlined-methodForOrder"
+              id="outlined-notificationMode"
               select
-              label="methodForOrder"
-              value={methodForOrder}
-              onChange={(e) => setMethodForOrder(e.target.value)}
+              label="notificationMode"
+              value={notificationMode}
+              onChange={(e) => setNotificationMode(e.target.value)}
               //   helperText="Please select your currency"
             >
-              {methodForOrderOption.map((option) => (
+              {notificationModeOption.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>

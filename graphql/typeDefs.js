@@ -22,7 +22,7 @@ const typeDefs = gql`
     name: String!
     discount: Int!
     commission: Int
-    methodForOrder: String
+    notificationMode: String
     email: String!
     password: String!
     delivery_option: Int!
@@ -153,7 +153,7 @@ const typeDefs = gql`
     discount: Int!
     commission: Int
     restaurant_image: String
-    methodForOrder: String
+    notificationMode: String
     dishes: [dishCartInput]
   }
   input AddressInput {

@@ -48,7 +48,7 @@ const restaurantSchema = new Schema(
     timing_close: String,
     restaurant_image: { type: String, default: null },
     have_access: { type: Boolean, default: true },
-    methodForOrder: { type: String },
+    notificationMode: { type: String, default: "EMAIL" },
     token: { type: String, default: "" },
     address: {
       street_address: String,

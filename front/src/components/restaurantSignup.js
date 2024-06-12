@@ -92,8 +92,8 @@ export default function ResSignup() {
   const [city, setCity] = useState(resProfile?.city || "");
   const [state, setState] = useState(resProfile?.state || "");
   const [country, setCountry] = useState(resProfile?.country || "Canada");
-  const [methodForOrder, setMethodForOrder] = useState(
-    resProfile?.methodForOrder || "email"
+  const [notificationMode, setNotificationMode] = useState(
+    resProfile?.notificationMode || "EMAIL"
   );
   const [zipcode, setZipcode] = useState(resProfile?.zipcode || "");
   const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
@@ -234,17 +234,17 @@ export default function ResSignup() {
     },
   ];
 
-  const methodForOrderOption = [
+  const notificationModeOption = [
     {
-      value: "text",
+      value: "TEXT",
       label: "Text",
     },
     {
-      value: "email",
+      value: "EMAIL",
       label: "Email",
     },
     {
-      value: "both",
+      value: "BOTH",
       label: "Both",
     },
   ];
@@ -302,7 +302,7 @@ export default function ResSignup() {
       name,
       street_address: streetAddress,
       city,
-      methodForOrder,
+      notificationMode,
       // commission,
       state,
       zipcode: zipcode,
@@ -503,14 +503,14 @@ export default function ResSignup() {
             </TextField>
 
             <TextField
-              id="outlined-methodForOrder"
+              id="outlined-notificationMode"
               select
-              label="methodForOrder"
-              value={methodForOrder}
-              onChange={(e) => setMethodForOrder(e.target.value)}
+              label="notificationMode"
+              value={notificationMode}
+              onChange={(e) => setNotificationMode(e.target.value)}
               //   helperText="Please select your currency"
             >
-              {methodForOrderOption.map((option) => (
+              {notificationModeOption.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
