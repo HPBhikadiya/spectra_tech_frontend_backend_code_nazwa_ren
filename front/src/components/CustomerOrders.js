@@ -67,6 +67,7 @@ import MehIcon from "@rsuite/icons/legacy/MehO";
 import SmileIcon from "@rsuite/icons/legacy/SmileO";
 import { Rate } from "rsuite";
 import { ADD_RATING_TO_ORDER } from "../graphql/mutation";
+import { Star } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   gridContainer: {
@@ -84,48 +85,9 @@ const useStyles = makeStyles({
 
 export default function CustomerOrders(props) {
   const renderCharacter = (value, index, order) => {
-    // unselected character
-    if (value < index + 1) {
-      return <MehIcon />;
-    }
-    if (value < 3) {
-      return (
-        <FrownIcon
-          style={{ color: "#99A9BF" }}
-          onClick={() => {
-            addRatingToOrder({
-              variables: {
-                orderId: order._id,
-                restaurantId: order.res_id,
-                rateCount: value,
-                customerId: customer_id,
-                feedback: "",
-              },
-            });
-          }}
-        />
-      );
-    }
-    if (value < 4) {
-      return (
-        <MehIcon
-          style={{ color: "#F4CA1D" }}
-          onClick={() => {
-            addRatingToOrder({
-              variables: {
-                orderId: order._id,
-                restaurantId: order.res_id,
-                customerId: customer_id,
-                rateCount: value,
-                feedback: "",
-              },
-            });
-          }}
-        />
-      );
-    }
+    
     return (
-      <SmileIcon
+      <Star
         style={{ color: "#ff9800" }}
         onClick={() => {
           addRatingToOrder({
@@ -147,7 +109,6 @@ export default function CustomerOrders(props) {
     onCompleted(res) {
       // let page_number = page;
       // getCustomersOrders(page_number - 1, pageSize);
-      console.log(res, "*************");
       dispatch(addRatingToCustomerOrder(res.addRatingToOrder));
 
       alert("Thank you for your feedback.");

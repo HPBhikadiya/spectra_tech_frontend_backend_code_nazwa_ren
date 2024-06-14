@@ -81,7 +81,7 @@ export default function CustomerCheckout() {
   const [deliveryAddressList, setDeliveryAddressList] = useState(
     customerProfile.delivery_addresses || []
   );
-  const [selectedAddress, setSelectedAddress] = useState();
+  const [selectedAddress, setSelectedAddress] = useState("");
   const [tip, setTip] = useState(0);
   const [newAddess, setNewAddess] = useState();
   const [open, setOpen] = useState(false);
@@ -180,10 +180,10 @@ export default function CustomerCheckout() {
   });
 
   const handlePlaceOrder = async (stripe, elements) => {
-    if (!isPickupOnlyRes && !selectedAddress) {
-      alert("Select a delivery address");
-      return;
-    }
+    // if (!isPickupOnlyRes && !selectedAddress) {
+    //   alert("Select a delivery address");
+    //   return;
+    // }
 
     const orderData = {
       cart: cart,
@@ -191,9 +191,7 @@ export default function CustomerCheckout() {
       first_name: customerProfile?.first_name,
       last_name: customerProfile?.first_name,
       delivery_type: isPickupOnlyRes ? 2 : 1,
-      delivery_address:
-        selectedAddress ||
-        `${street_address}, ${zipcode}, ${city}, ${state}, ${country}`,
+      delivery_address: ``,
       order_date_time: new Date().toISOString(),
       amount: parseFloat(totalAmount.toFixed(2)),
       delivery_fee: deliveryFee,
@@ -251,9 +249,7 @@ export default function CustomerCheckout() {
             delivery_type: isPickupOnlyRes ? 2 : 1,
             first_name: customerProfile.first_name,
             last_name: customerProfile.last_name,
-            delivery_address:
-              selectedAddress ||
-              `${street_address}, ${zipcode}, ${city}, ${state}, ${country}`,
+            delivery_address: "",
             order_date_time: moment().toISOString(),
             total_amount: subTotalAmount,
             delivery_fee: deliveryFee,
@@ -378,7 +374,7 @@ export default function CustomerCheckout() {
               </ListItem>
             </div>
           </List>
-          {isPickupOnlyRes ? (
+          {/* {isPickupOnlyRes ? (
             <Typography
               variant="body1"
               color="black"
@@ -428,7 +424,7 @@ export default function CustomerCheckout() {
                 Add
               </Button>
             </form>
-          )}
+          )} */}
           {/* <Button>Add a delivery Addres</Button> */}
         </div>
         <div
@@ -616,7 +612,7 @@ export default function CustomerCheckout() {
               </Typography>
             </div>
           </div>
-          “100% of tips will go to the Restaurant”
+          100% of tips will go to the restaurant
           <div
             style={{
               width: "100%",
