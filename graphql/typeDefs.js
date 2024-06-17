@@ -22,6 +22,7 @@ const typeDefs = gql`
     name: String!
     discount: Int!
     commission: Int
+    stripeAccountId: String
     notificationMode: String
     email: String!
     password: String!
@@ -152,6 +153,7 @@ const typeDefs = gql`
     token: String
     discount: Int!
     commission: Int
+    stripeAccountId: String
     restaurant_image: String
     notificationMode: String
     dishes: [dishCartInput]
@@ -221,6 +223,13 @@ const typeDefs = gql`
   #     delivery_status: Int!
   # }
 
+  type RestaurantSignUpResponse {
+    object: String
+    created: Int
+    expires_at: Int
+    url: String
+  }
+
   type OrderOutputWithPage {
     data: [Order]
     page: Int
@@ -251,7 +260,9 @@ const typeDefs = gql`
     customerLogout(logoutInput: LogoutInput!): Boolean
     restaurantLogout(logoutInput: LogoutInput!): Boolean
     customerSignup(customerSignupInput: CustomerSignupInput): Boolean
-    restaurantSignup(restaurantSignupInput: RestaurantSignupInput): Boolean
+    restaurantSignup(
+      restaurantSignupInput: RestaurantSignupInput
+    ): RestaurantSignUpResponse!
     updateResOrderStatus(
       res_id: String!
       order_id: String!

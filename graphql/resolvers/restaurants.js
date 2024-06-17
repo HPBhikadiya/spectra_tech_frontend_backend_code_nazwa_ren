@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import config from "../../utils/config.js";
 import Orders from "../../Models/orders.js";
+import { stripeInstance } from "../../utils/stripe.js";
 
 const resolvers = {
   Query: {
@@ -159,30 +160,62 @@ const resolvers = {
         if (existingUser) {
           throw new Error("Restaurant with given email already exist");
         }
-        await bcrypt.hash(password, 10, async function (err, hash) {
-          const resBody = new Restaurants({
-            name,
-            email,
-            password: hash,
-            phone_number: "",
-            description: "",
-            timing_open: "",
-            timing_close: "",
-            token: "",
-            restaurant_image: "",
-            address: {
-              street_address,
-              apt_number,
-              city,
-              state,
-              country,
-              zipcode,
-            },
-            dishes: [],
-          });
-          const r = await resBody.save();
-          // return;
+        const password1 = await bcrypt.hash(password, 10);
+
+        const resBody = new Restaurants({
+          name,
+          email,
+          password: password1,
+          phone_number: "",
+          description: "",
+          timing_open: "",
+          timing_close: "",
+          token: "",
+          restaurant_image: "",
+          address: {
+            street_address,
+            apt_number,
+            city,
+            state,
+            country,
+            zipcode,
+          },
+          dishes: [],
         });
+        const data = await resBody.save();
+
+        const account = await stripeInstance().accounts.create({
+          country: "CA",
+          email: email,
+          type: "express",
+          // controller: {
+          //   fees: {
+          //     payer: "application",
+          //   },
+          //   losses: {
+          //     payments: "application",
+          //   },
+          //   stripe_dashboard: {
+          //     type: "express",
+          //   },
+          // },
+        });
+        const accountId = account.id;
+        const accountLink = await stripeInstance().accountLinks.create({
+          account: accountId,
+          return_url: `http://localhost:3000/login`,
+          refresh_url: `http://localhost:3000/refresh/${accountId}`,
+          type: "account_onboarding",
+        });
+        await Restaurants.findByIdAndUpdate(
+          data._id.toString(),
+          {
+            stripeAccountId: accountId,
+          },
+          { new: true }
+        );
+
+        return accountLink;
       } catch (error) {
         console.log("error==", error);
         throw new Error(error);

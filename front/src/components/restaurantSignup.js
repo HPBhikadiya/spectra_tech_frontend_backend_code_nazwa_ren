@@ -283,8 +283,9 @@ export default function ResSignup() {
   const [restaurantSignup] = useMutation(RESTAURANT_SIGNUP, {
     onCompleted(res) {
       console.log("da", res);
+      // history.push("/login");
+      window.location.href = res.restaurantSignup.url;
       dispatch(onResSignup());
-      history.push("/login");
     },
     onError(e) {
       alert(JSON.parse(JSON.stringify(e))?.message);

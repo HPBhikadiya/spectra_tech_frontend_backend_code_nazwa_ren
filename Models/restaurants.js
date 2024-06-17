@@ -42,6 +42,7 @@ const restaurantSchema = new Schema(
     delivery_option: { type: Number, default: 1 },
     discount: { type: Number, default: 0 },
     commission: { type: Number, default: 10 },
+    stripeAccountId: String,
     phone_number: String,
     description: String,
     timing_open: String,

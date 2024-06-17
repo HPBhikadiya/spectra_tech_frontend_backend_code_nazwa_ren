@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import config from "../../utils/config.js";
 import { sendMessageTwilio } from "../../utils/twilio.js";
+import { sendEmail } from "../../utils/sendgrid.js";
 
 const resolvers = {
   Query: {
@@ -139,13 +140,26 @@ const resolvers = {
         if (!restaurant) {
           throw new Error("restaurant not found");
         }
-        if (
-          restaurant.notificationMode === "TEXT" ||
-          restaurant.notificationMode === "BOTH"
-        ) {
+        if (restaurant.notificationMode === "TEXT") {
           await sendMessageTwilio({
             to: restaurant.phone_number,
+            amount: total_amount,
           }).catch(async (error) => {
+            console.log(error);
+          });
+        } else if (restaurant.notificationMode === "EMAIL") {
+          await sendEmail().catch(async (error) => {
+            console.log(error);
+          });
+        } else if (restaurant.notificationMode === "BOTH") {
+          await sendMessageTwilio({
+            to: restaurant.phone_number,
+            amount: total_amount,
+          }).catch(async (error) => {
+            console.log(error);
+          });
+
+          await sendEmail().catch(async (error) => {
             console.log(error);
           });
         }

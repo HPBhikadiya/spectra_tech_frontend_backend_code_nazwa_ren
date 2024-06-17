@@ -116,7 +116,12 @@ const RESTAURANT_SIGNUP = gql`
         country: $country
         zipcode: $zipcode
       }
-    )
+    ) {
+      object
+      created
+      expires_at
+      url
+    }
   }
 `;
 
