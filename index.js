@@ -111,10 +111,6 @@ app.post("/upload_image", upload.single("file"), (req, res) => {
   }
 });
 
-import stripe from "stripe";
-const stripeSecretKey =
-  "sk_test_51PD8wPGEpr3f403gWH7pshof2l5NaWjH8G8qfKoHyFPpvoFyMeIBgh4hHt3YRSLdEkNZSaavLHwAlgSlxJ4CYyPF00wBYkHRdj";
-const stripeClient = new stripe(stripeSecretKey);
 // Use of another path to see results for js_refresher.js
 app.post("/process-payment", async (req, res) => {
   const { amount, payment_method } = req.body;

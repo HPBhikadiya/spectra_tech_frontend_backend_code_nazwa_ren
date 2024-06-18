@@ -48,6 +48,7 @@ const PLACE_ORDER = gql`
     $delivery_fee: Float
     $taxes: Float
     $instruction: String
+    $paymentIntentId: String
     $tip: Float
     $cart: [CartInput]!
   ) {
@@ -63,6 +64,7 @@ const PLACE_ORDER = gql`
         delivery_fee: $delivery_fee
         taxes: $taxes
         instruction: $instruction
+        paymentIntentId: $paymentIntentId
         tip: $tip
         cart: $cart
       }
@@ -81,6 +83,7 @@ const PLACE_ORDER = gql`
         dish_name
         dish_price
       }
+      paymentIntentId
       delivery_type
       delivery_date_time
       delivery_status

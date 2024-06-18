@@ -52,6 +52,7 @@ const orderSchema = new Schema(
     instruction: { type: String },
     total_amount: { type: Number, default: 0 },
     order_items: [orderItemSchema],
+    paymentIntentId: { type: String },
   },
   {
     versionKey: false,

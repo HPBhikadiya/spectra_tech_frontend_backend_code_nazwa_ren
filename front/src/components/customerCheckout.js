@@ -221,7 +221,11 @@ export default function CustomerCheckout() {
 
       // Assuming the response from your backend includes the client secret for the PaymentIntent
       const clientSecret = response.data.clientSecret;
-      console.log(response.data.clientSecret);
+      const paymentIntentId = response.data.paymentIntentId;
+      // console.log(
+      //   response.data.clientSecret + " * ",
+      //   response.data.paymentIntentId
+      // );
 
       // Use Stripe.js and Elements to handle payment confirmation
       const stripe = await stripePromise;
@@ -256,6 +260,7 @@ export default function CustomerCheckout() {
             taxes,
             instruction: cart[0]?.instruction,
             tip: parseFloat(20),
+            paymentIntentId,
             cart: cart.map((item) => {
               return {
                 ...item,

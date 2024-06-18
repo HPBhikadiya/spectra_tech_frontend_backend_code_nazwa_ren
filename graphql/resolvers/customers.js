@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import config from "../../utils/config.js";
 import { sendMessageTwilio } from "../../utils/twilio.js";
 import { sendEmail } from "../../utils/sendgrid.js";
+import { stripeInstance } from "../../utils/stripe.js";
 
 const resolvers = {
   Query: {
@@ -101,6 +102,7 @@ const resolvers = {
           taxes,
           instruction,
           tip,
+          paymentIntentId,
         } = placeOrderInput;
         // For single Rest order place:
         let cartList = cart?.length > 0 && cart[0];
@@ -133,8 +135,10 @@ const resolvers = {
           instruction,
           total_amount,
           order_items,
+          paymentIntentId,
         };
 
+        console.log({ paymentIntentId });
         const restaurant = await RestaurantModel.findById(orderPayload.res_id);
 
         if (!restaurant) {
@@ -165,6 +169,58 @@ const resolvers = {
         }
         const order = new Orders({ ...orderPayload });
         const savedOrder = await order.save();
+        function delay(ms) {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+
+        await delay(2000);
+        const paymentIntent = await stripeInstance().paymentIntents.retrieve(
+          paymentIntentId
+        );
+        // console.log({ paymentIntent });
+        console.log("paymentIntent stage clear");
+
+        const totalDescription = JSON.parse(paymentIntent.description);
+        const {
+          description: { subTotalAmount },
+        } = totalDescription;
+
+        const commissionAmount = subTotalAmount * 0.1; // 10% commission
+
+        const chargeId = paymentIntent.latest_charge;
+        const charge = await stripeInstance().charges.retrieve(chargeId);
+        // console.log({ charge });
+        console.log("charge stage clear");
+
+        const balance_transaction =
+          await stripeInstance().balanceTransactions.retrieve(
+            charge.balance_transaction
+          );
+        // console.log({ balance_transaction });
+        console.log("balance_transaction stage clear");
+
+        const charges = balance_transaction.fee / 100;
+        const cutAmount = commissionAmount + charges;
+
+        const finalRefundAmount = Math.floor(
+          paymentIntent.amount - cutAmount * 100
+        );
+
+        console.log({
+          cutAmount,
+          finalRefundAmount,
+          charges,
+        });
+
+        const connectedAccountId = restaurant.stripeAccountId;
+
+        const transfer = await stripeInstance().transfers.create({
+          amount: finalRefundAmount,
+          currency: "cad",
+          destination: connectedAccountId,
+          transfer_group: savedOrder._id.toString(),
+        });
+
         return savedOrder;
       } catch (error) {
         console.log(error);

@@ -90,6 +90,7 @@ const typeDefs = gql`
     total_amount: Float
     order_items: [OrderItem]
     rateId: Rate
+    paymentIntentId: String
   }
 
   type OrderItem {
@@ -136,6 +137,7 @@ const typeDefs = gql`
     instruction: String
     tip: Float
     cart: [CartInput]
+    paymentIntentId: String
   }
 
   input CartInput {
