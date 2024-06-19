@@ -22,7 +22,7 @@ import CustomerProfileDetails from "./components/CustomerProfileDetails";
 import TermsAndConditionsCus from "./components/terms-and-conditions-cus";
 import TermsAndConditionsRes from "./components/terms-and-conditions-res";
 import PrivacyNotice from "./components/privacy-notice";
-const path = require("path");
+import OrderConfirm from "./components/OrderConfirm";
 /*App.use(express.static(path.join(__dirname, '/frontend/build))')))
 App.listen(5000, () => {
   console.log("Server is running on port 5000");
@@ -45,6 +45,7 @@ function App() {
       <Route path="/restaurant_orders" component={RestaurantOrders} />
       <Route path="/customer_favourites" component={FavouritesTab} />
       <Route path="/customer_detail" component={CustomerProfileDetails} />
+      <Route path="/order-confirm" component={OrderConfirm} />
       <Route
         path="/terms-and-conditions-cus"
         component={TermsAndConditionsCus}

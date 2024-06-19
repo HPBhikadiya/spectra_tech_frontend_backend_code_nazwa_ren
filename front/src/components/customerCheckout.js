@@ -172,7 +172,7 @@ export default function CustomerCheckout() {
       handleClose();
       alert("Your order is placed successfully");
       dispatch(clearCart());
-      history.push("/");
+      history.push("/order-confirm");
     },
     onError(e) {
       console.log("--dfd", e);
