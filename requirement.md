@@ -50,6 +50,8 @@ Once order is Fulfilled, Customers can “Rate Restaurant” on their orders pag
 ✅ Remove delivery address✅
 ✅ Starts instead of faces, make is smaller✅
 
+move to next step => preparing, done
+
 the text looks long but its just the explication
 
 for the database i have mongodb
