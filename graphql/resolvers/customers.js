@@ -138,12 +138,18 @@ const resolvers = {
           paymentIntentId,
         };
 
-        console.log({ paymentIntentId });
         const restaurant = await RestaurantModel.findById(orderPayload.res_id);
-
-        if (!restaurant) {
-          throw new Error("restaurant not found");
+        const customer = await Customers.findById(orderPayload.customer_id);
+        if (!restaurant || !customer) {
+          throw new Error("restaurant / customer not found");
         }
+
+        const mailData = {
+          email: restaurant.email,
+          subject: "New Order received.",
+          html: `<strong>New order Received ${total_amount}</strong>`,
+        };
+
         if (restaurant.notificationMode === "TEXT") {
           await sendMessageTwilio({
             to: restaurant.phone_number,
@@ -152,7 +158,7 @@ const resolvers = {
             console.log(error);
           });
         } else if (restaurant.notificationMode === "EMAIL") {
-          await sendEmail().catch(async (error) => {
+          await sendEmail(mailData).catch(async (error) => {
             console.log(error);
           });
         } else if (restaurant.notificationMode === "BOTH") {
@@ -163,7 +169,7 @@ const resolvers = {
             console.log(error);
           });
 
-          await sendEmail().catch(async (error) => {
+          await sendEmail(mailData).catch(async (error) => {
             console.log(error);
           });
         }
@@ -205,12 +211,6 @@ const resolvers = {
         const finalRefundAmount = Math.floor(
           paymentIntent.amount - cutAmount * 100
         );
-
-        console.log({
-          cutAmount,
-          finalRefundAmount,
-          charges,
-        });
 
         const connectedAccountId = restaurant.stripeAccountId;
 

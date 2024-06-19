@@ -14,6 +14,7 @@ const config = {
   fromMail: "spectratechcorp@gmail.com",
   stripeSecretKey:
     "sk_test_51PD8wPGEpr3f403gWH7pshof2l5NaWjH8G8qfKoHyFPpvoFyMeIBgh4hHt3YRSLdEkNZSaavLHwAlgSlxJ4CYyPF00wBYkHRdj",
+  stripeEmail: "ren@spectradiscount.ca",
 };
 
 export default config;

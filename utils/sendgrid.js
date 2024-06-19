@@ -7,10 +7,9 @@ sgMail.setApiKey(config.sendGridAPI);
 export const sendEmail = async (data) => {
   const msg = {
     to: data.email,
-    from: "spectratechcorp@gmail.com", // Use the email address or domain you verified above
-    subject: "Sending with Twilio SendGrid is Fun",
-    text: "and easy to do anywhere, even with Node.js",
-    html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+    from: config.stripeEmail, // Use the email address or domain you verified above
+    subject: data.subject,
+    html: data.html,
   };
 
   msg.headers = { Priority: "Urgent", Importance: "high" };
