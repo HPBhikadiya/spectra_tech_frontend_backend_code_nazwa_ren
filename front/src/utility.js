@@ -28,6 +28,19 @@ export const getOrderStatus = (num) => {
   return options[num - 1];
 };
 
+export const getOrderStatusButton = (num) => {
+  const options = [
+    "Received",
+    "Prepare",
+    // "on the way",
+    "FullFill",
+    // "pickup_ready",
+    // "picked_up",
+    "cancelled",
+  ];
+  return options[num - 1];
+};
+
 export const isValidEmail = (email) => {
   var re =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; //eslint-disable-line

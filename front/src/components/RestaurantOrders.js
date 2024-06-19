@@ -54,7 +54,7 @@ import {
   updateCustomerOrders,
   updateResOrders,
 } from "../app/reducers/mainSlice";
-import { capsStrFirstChar, getOrderStatus } from "../utility";
+import { capsStrFirstChar, getOrderStatus, getOrderStatusButton } from "../utility";
 // import "./styles.css";
 import ResDishCard from "./ResDishCard";
 import CartDialog from "./CartDialog";
@@ -91,7 +91,7 @@ export default function CustomerOrders(props) {
   useEffect(() => {
     const orderDict = {
       0: [1, 2, 3, 4, 5, 6, 7],
-      1: [1,2],
+      1: [1, 2],
       2: [3],
       3: [4],
     };
@@ -301,7 +301,7 @@ export default function CustomerOrders(props) {
               <FormControlLabel
                 value="2"
                 control={<Radio />}
-                label="Delivered"
+                label="Full Filled"
               />
               <FormControlLabel
                 value="3"
@@ -415,7 +415,7 @@ export default function CustomerOrders(props) {
                         )
                       }
                     >
-                      Move to Next status
+                      Move to {getOrderStatusButton(order?.delivery_status + 1)}
                     </Button>
                   )}
                   {[1].includes(order?.delivery_status) && (

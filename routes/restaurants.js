@@ -4,6 +4,7 @@ import multer from "multer";
 import auth from "../middleware/auth.js";
 import Restaurants, { Dish } from "../Models/restaurants.js";
 import Orders from "../Models/orders.js";
+import { stripeInstance } from "../utils/stripe.js";
 
 const router = express.Router();
 
@@ -197,6 +198,13 @@ router.put("/order", async (req, res) => {
     order.delivery_status = delivery_status;
     order = await order.save();
     const updatedOrders = await Orders.find({ res_id });
+
+    if (delivery_status === 4) {
+      await stripeInstance().refunds.create({
+        payment_intent: order.paymentIntentId,
+      });
+    }
+
     return res.status(200).json({ data: updatedOrders });
   } catch (error) {
     console.log(error);
