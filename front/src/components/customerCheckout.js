@@ -286,7 +286,7 @@ export default function CustomerCheckout() {
             delivery_fee: deliveryFee,
             taxes,
             instruction: cart[0]?.instruction,
-            tip: parseFloat(20),
+            tip: parseFloat(tip),
             paymentIntentId,
             cart: cart.map((item) => {
               return {

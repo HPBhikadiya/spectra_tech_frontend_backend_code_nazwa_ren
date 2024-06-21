@@ -54,6 +54,7 @@ const orderSchema = new Schema(
     order_items: [orderItemSchema],
     paymentIntentId: { type: String },
     transferId: { type: String },
+    paymentDetails: { type: Object },
   },
   {
     versionKey: false,

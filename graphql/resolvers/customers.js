@@ -224,6 +224,16 @@ const resolvers = {
           savedOrder._id.toString(),
           {
             transferId: transfer.id,
+            paymentDetails: {
+              tip,
+              subTotalAmount,
+              commissionAmount,
+              charges,
+              cutAmount,
+              transfer: transfer.amount / 100,
+              totalAmount: paymentIntent.amount / 100,
+              taxes,
+            },
           }
         );
         return updatedOrders;

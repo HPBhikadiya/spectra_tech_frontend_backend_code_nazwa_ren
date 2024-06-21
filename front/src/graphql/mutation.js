@@ -85,6 +85,14 @@ const PLACE_ORDER = gql`
       }
       paymentIntentId
       transferId
+      paymentDetails {
+        tip
+        subTotalAmount
+        commissionAmount
+        charges
+        cutAmount
+        transfer
+      }
       delivery_type
       delivery_date_time
       delivery_status

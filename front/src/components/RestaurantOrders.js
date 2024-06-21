@@ -510,7 +510,6 @@ function SimpleDialog(props) {
   const { onClose, open, order = {}, orderDetails = {} } = props;
 
   // const [error, setError]
-
   const handleClose = () => {
     onClose();
   };
@@ -622,7 +621,7 @@ function SimpleDialog(props) {
             {`Special Instruction: ${order.instruction} \n`}
           </Typography>
         )}
-        <Typography
+        {/* <Typography
           variant="body1"
           style={{
             fontSize: 13,
@@ -631,9 +630,47 @@ function SimpleDialog(props) {
             color: "black",
             textAlign: "start",
           }}
-        >
-          {`Delivered at: ${order.delivery_address}`}
-        </Typography>
+        ></Typography>
+        {`Delivered at: ${order.delivery_address}`} */}
+        {order.paymentDetails && (
+          <Typography
+            variant="body1"
+            style={{
+              fontSize: 13,
+              paddingRight: 30,
+              marginLeft: 16,
+              color: "black",
+              textAlign: "start",
+            }}
+          >
+            {`Sub-Total : ${order.paymentDetails.subTotalAmount.toFixed(2)}`}
+            <br />
+
+            {`Tax : ${order.paymentDetails.taxes.toFixed(2)}`}
+            <br />
+            {`Tip : ${(
+              ((order.paymentDetails.subTotalAmount +
+                order.paymentDetails.taxes) *
+                order.paymentDetails.tip) /
+              100
+            ).toFixed(2)}`}
+            <br />
+            {`Total Amount : ${order.paymentDetails.totalAmount.toFixed(2)}`}
+            <br />
+            {`Commission : -${order.paymentDetails.commissionAmount.toFixed(
+              2
+            )}`}
+            <br />
+            {`Stripe Fee : -${order.paymentDetails.charges.toFixed(2)}`}
+            <br />
+            {`You received : ${(
+              order.paymentDetails.totalAmount -
+              order.paymentDetails.commissionAmount -
+              order.paymentDetails.charges
+            ).toFixed(2)}`}
+            <br />
+          </Typography>
+        )}
       </div>
     </Dialog>
   );
@@ -685,6 +722,12 @@ function CancelOrderDialog({
           <MenuItem value={2}>Sold out</MenuItem>
           <MenuItem value={3}>⁠Cannot fulfill</MenuItem>
         </Select>
+        <p></p>
+        <p>
+          {cancelReason === 1 && "Customer will charge for stripe fee"}
+          {(cancelReason === 2 || cancelReason === 3) &&
+            "you will charge for stripe fee"}
+        </p>
       </DialogContent>
       <DialogActions>
         <Button

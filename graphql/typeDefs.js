@@ -92,6 +92,16 @@ const typeDefs = gql`
     rateId: Rate
     paymentIntentId: String
     transferId: String
+    paymentDetails: [paymentDetails]
+  }
+
+  type paymentDetails {
+    tip: Int
+    subTotalAmount: Int
+    commissionAmount: Int
+    charges: Int
+    cutAmount: Int
+    transfer: Int
   }
 
   type OrderItem {
