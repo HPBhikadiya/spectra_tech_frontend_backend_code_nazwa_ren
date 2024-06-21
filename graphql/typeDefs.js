@@ -91,6 +91,7 @@ const typeDefs = gql`
     order_items: [OrderItem]
     rateId: Rate
     paymentIntentId: String
+    transferId: String
   }
 
   type OrderItem {
@@ -180,6 +181,7 @@ const typeDefs = gql`
     res_id: ID!
     _id: ID!
     quantity: Int!
+    original_dish_price: Int
   }
 
   input CreateDishInput {

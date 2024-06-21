@@ -220,8 +220,13 @@ const resolvers = {
           destination: connectedAccountId,
           transfer_group: savedOrder._id.toString(),
         });
-
-        return savedOrder;
+        const updatedOrders = await Orders.findByIdAndUpdate(
+          savedOrder._id.toString(),
+          {
+            transferId: transfer.id,
+          }
+        );
+        return updatedOrders;
       } catch (error) {
         console.log(error);
         throw new Error(error);

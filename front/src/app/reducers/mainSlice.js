@@ -147,6 +147,7 @@ export const mainSlice = createSlice({
                       (payload.dish.dish_price * payload.res.discount) / 100
                     ).toFixed(2)
                   : payload.dish.dish_price,
+                original_dish_price: payload.dish.dish_price,
                 quantity: 1,
               },
             ],
@@ -166,6 +167,7 @@ export const mainSlice = createSlice({
                     (payload.dish.dish_price * payload.res.discount) / 100
                   ).toFixed(2)
                 : payload.dish.dish_price,
+              original_dish_price: payload.dish.dish_price,
               quantity: 1,
             });
           }

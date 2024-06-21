@@ -84,6 +84,7 @@ const GET_CUSTOMER_ORDERS = gql`
         delivery_address
         delivery_status
         paymentIntentId
+        transferId
         rateId {
           _id
           orderId

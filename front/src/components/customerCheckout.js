@@ -141,7 +141,6 @@ export default function CustomerCheckout() {
         cart[resIndex].dishes[dishIndex].quantity;
     }
   }
-
   const deliveryFee = 0.0;
   const taxes = parseFloat(((subTotalAmount * 14.975) / 100).toFixed(2));
   // const taxes = (subTotalAmount * 14.975) / 100;
@@ -160,6 +159,34 @@ export default function CustomerCheckout() {
       setTotalAmount(defaultTotalAmount);
     }
   };
+
+  const [savedAmount, setSavedAmount] = useState(0);
+  useEffect(() => {
+    let subTotalAmountTmp = 0;
+    for (let resIndex = 0; resIndex < cart.length; resIndex++) {
+      for (
+        let dishIndex = 0;
+        dishIndex < cart[resIndex].dishes?.length;
+        dishIndex++
+      ) {
+        subTotalAmountTmp +=
+          cart[resIndex].dishes[dishIndex].original_dish_price *
+          cart[resIndex].dishes[dishIndex].quantity;
+      }
+    }
+
+    const tipAmount = tip
+      ? parseFloat(((subTotalAmountTmp * tip) / 100).toFixed(2))
+      : 0;
+
+    const totalAmountAfterTip = subTotalAmountTmp + tipAmount;
+
+    const taxes = parseFloat(((totalAmountAfterTip * 14.975) / 100).toFixed(2));
+
+    const finalAmount = totalAmountAfterTip + taxes;
+
+    setSavedAmount((finalAmount - totalAmount).toFixed(2));
+  }, [tip, cart, totalAmount]);
 
   const resAddress = cart.length > 0 && cart[0].address;
   const pickupAddress = Object.values(resAddress).join(", ");
@@ -473,7 +500,7 @@ export default function CustomerCheckout() {
               paddingBottom: 0,
             }}
           >
-            <Typography
+            {/* <Typography
               variant="body1"
               color="black"
               style={{ alignSelf: "center", textAlign: "center" }}
@@ -486,7 +513,7 @@ export default function CustomerCheckout() {
               style={{ alignSelf: "center", textAlign: "center" }}
             >
               {`$ ${deliveryFee}`}
-            </Typography>
+            </Typography> */}
           </div>
           <div
             style={{
@@ -617,7 +644,9 @@ export default function CustomerCheckout() {
               </Typography>
             </div>
           </div>
-          100% of tips will go to the restaurant
+          100% of tips will go to the restaurant.
+          <br />
+          You save {savedAmount} dollars on this order.
           <div
             style={{
               width: "100%",

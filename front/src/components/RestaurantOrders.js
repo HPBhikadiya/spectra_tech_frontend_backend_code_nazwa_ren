@@ -54,11 +54,18 @@ import {
   updateCustomerOrders,
   updateResOrders,
 } from "../app/reducers/mainSlice";
-import { capsStrFirstChar, getOrderStatus, getOrderStatusButton } from "../utility";
+import {
+  capsStrFirstChar,
+  getOrderStatus,
+  getOrderStatusButton,
+} from "../utility";
 // import "./styles.css";
 import ResDishCard from "./ResDishCard";
 import CartDialog from "./CartDialog";
 import { UPDATE_ORDER_STATUS } from "../graphql/mutation.js";
+import { styled } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 const useStyles = makeStyles({
   gridContainer: {
@@ -74,10 +81,22 @@ const useStyles = makeStyles({
   },
 });
 
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiPaper-root": {
+    width: "500px",
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+
 export default function CustomerOrders(props) {
   const mainReducer = useSelector((state) => state.mainReducer);
   const { resProfile, token, resOrders } = mainReducer;
-  console.log("==resProfile", resProfile, token);
+
   const res_id = resProfile?._id;
   const [selectedOrder, setSelectedOrder] = useState({});
   const [selectedOrderDetails, setSelectedOrderDetails] = useState([]);
@@ -233,6 +252,7 @@ export default function CustomerOrders(props) {
       console.log(err);
     }
   };
+  const [cancelReason, setCancelReason] = useState("");
 
   const cancelOrderStatusApi = async (
     order_id,
@@ -240,6 +260,10 @@ export default function CustomerOrders(props) {
     delivery_type
   ) => {
     if ([7, 6, 4].includes(parseInt(delivery_status))) {
+      return;
+    }
+    if (cancelReason === "") {
+      window.alert("Please select a cancel reason");
       return;
     }
     const url = `/restaurants/order`;
@@ -250,15 +274,31 @@ export default function CustomerOrders(props) {
       res_id,
       order_id,
       delivery_status: 4,
+      cancelReason,
     };
 
     try {
       const res = await axios.put(url, body, { headers });
       console.log("response", res);
+      handleCancelClose(false);
+      setCancelReason("");
       await dispatch(updateResOrders(res.data?.data));
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const [openCancel, setCancelOpen] = useState(false);
+  const handleChange = (event) => {
+    setCancelReason(event.target.value);
+  };
+  const handleCancelClickOpen = (tmpOrder) => {
+    setCancelOpen(true);
+    setSelectedOrder(tmpOrder);
+  };
+  const handleCancelClose = () => {
+    setCancelOpen(false);
+    setSelectedOrder({});
   };
 
   return (
@@ -427,13 +467,14 @@ export default function CustomerOrders(props) {
                         backgroundColor: "#CB0C0C",
                         color: "white",
                       }}
-                      onClick={() =>
-                        cancelOrderStatusApi(
-                          order?._id,
-                          order?.delivery_status,
-                          order?.delivery_type
-                        )
-                      }
+                      onClick={() => {
+                        handleCancelClickOpen(order);
+                        // cancelOrderStatusApi(
+                        //   order?._id,
+                        //   order?.delivery_status,
+                        //   order?.delivery_type
+                        // );
+                      }}
                     >
                       Cancel Order
                     </Button>
@@ -450,6 +491,16 @@ export default function CustomerOrders(props) {
         order={selectedOrder}
         orderDetails={selectedOrderDetails}
         // onCreateOrder={onCreateOrder}
+      />
+      <CancelOrderDialog
+        // handleCancelClickOpen={handleCancelClickOpen}
+        handleCancelClose={handleCancelClose}
+        openCancel={openCancel}
+        cancelReason={cancelReason}
+        setCancelReason={setCancelReason}
+        handleChange={handleChange}
+        order={selectedOrder}
+        cancelOrderStatusApi={cancelOrderStatusApi}
       />
     </>
   );
@@ -585,5 +636,75 @@ function SimpleDialog(props) {
         </Typography>
       </div>
     </Dialog>
+  );
+}
+
+function CancelOrderDialog({
+  handleCancelClose,
+  openCancel,
+  cancelReason,
+  handleChange,
+  order,
+  cancelOrderStatusApi,
+}) {
+  return (
+    <BootstrapDialog
+      onClose={handleCancelClose}
+      aria-labelledby="customized-dialog-title"
+      open={openCancel}
+    >
+      <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+        Select a reason for cancel
+      </DialogTitle>
+      <IconButton
+        aria-label="close"
+        onClick={handleCancelClose}
+        sx={{
+          position: "absolute",
+          right: 8,
+          top: 8,
+          color: (theme) => theme.palette.grey[500],
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
+      <DialogContent dividers>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={cancelReason}
+          label="Age"
+          onChange={handleChange}
+          style={{
+            width: "100%  ",
+          }}
+        >
+          <MenuItem value={1}>
+            Customer does not qualify (36 years old+)
+          </MenuItem>
+          <MenuItem value={2}>Sold out</MenuItem>
+          <MenuItem value={3}>⁠Cannot fulfill</MenuItem>
+        </Select>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          variant="outlined"
+          style={{
+            marginLeft: 20,
+            backgroundColor: "#CB0C0C",
+            color: "white",
+          }}
+          onClick={() => {
+            cancelOrderStatusApi(
+              order?._id,
+              order?.delivery_status,
+              order?.delivery_type
+            );
+          }}
+        >
+          Cancel Order
+        </Button>
+      </DialogActions>
+    </BootstrapDialog>
   );
 }

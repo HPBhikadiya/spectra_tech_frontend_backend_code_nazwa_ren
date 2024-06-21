@@ -84,6 +84,7 @@ const PLACE_ORDER = gql`
         dish_price
       }
       paymentIntentId
+      transferId
       delivery_type
       delivery_date_time
       delivery_status

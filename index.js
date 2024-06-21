@@ -23,6 +23,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { v4 as uuidv4 } from "uuid";
 import { extname } from "path";
+import * as fs from "fs";
 // Get the directory name of the current module
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -76,9 +77,22 @@ app.use("/customers", customers);
 app.use("/logout", logout);
 app.use("/payment", paymentRouter);
 app.use("", imageUpload);
+// app.use("/stripe", async (req, res) => {
+//   const accounts = await stripeInstance().accounts.retrieve(
+//     "acct_1PT0Cg4gGgEYddkT"
+//   );
+//   const balance = await stripeInstance().balance.retrieve({
+//     stripeAccount: "acct_1PT0Cg4gGgEYddkT",
+//   });
+//   ("acct_1PT0Cg4gGgEYddkT");
+//   res.status(200).json({ accounts, balance });
+//   fs.writeFileSync("balance.json", JSON.stringify(balance, null, 2));
+//   fs.writeFileSync("accounts.json", JSON.stringify(accounts, null, 2));
+// });
 
 const port = 3002;
 import multer from "multer";
+import { stripeInstance } from "./utils/stripe.js";
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/"); // Specify the directory where files will be stored

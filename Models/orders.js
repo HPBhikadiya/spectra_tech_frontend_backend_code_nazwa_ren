@@ -53,6 +53,7 @@ const orderSchema = new Schema(
     total_amount: { type: Number, default: 0 },
     order_items: [orderItemSchema],
     paymentIntentId: { type: String },
+    transferId: { type: String },
   },
   {
     versionKey: false,

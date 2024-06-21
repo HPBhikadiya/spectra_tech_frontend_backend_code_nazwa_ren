@@ -193,16 +193,81 @@ router.get("/:id/orders", async (req, res) => {
 // Update order
 router.put("/order", async (req, res) => {
   try {
-    const { order_id, delivery_status, res_id } = req.body;
+    const { order_id, delivery_status, res_id, cancelReason } = req.body;
     let order = await Orders.findById(order_id);
     order.delivery_status = delivery_status;
     order = await order.save();
-    const updatedOrders = await Orders.find({ res_id });
+    const restaurant = await Restaurants.findById(order.res_id);
+    let updatedOrders = await Orders.findById(order_id);
 
     if (delivery_status === 4) {
-      await stripeInstance().refunds.create({
-        payment_intent: order.paymentIntentId,
-      });
+      if (cancelReason === 1) {
+        const paymentIntent = await stripeInstance().paymentIntents.retrieve(
+          order.paymentIntentId
+        );
+
+        const chargeId = paymentIntent.latest_charge;
+        const charge = await stripeInstance().charges.retrieve(chargeId);
+
+        const balance_transaction =
+          await stripeInstance().balanceTransactions.retrieve(
+            charge.balance_transaction
+          );
+
+        const charges = balance_transaction.fee;
+
+        await stripeInstance()
+          .transfers.retrieve(order.transferId)
+          .then(async (transfer) => {
+            await stripeInstance()
+              .transfers.createReversal(transfer.id, {
+                amount: transfer.amount,
+              })
+              .then(async () => {
+                await stripeInstance().refunds.create({
+                  payment_intent: order.paymentIntentId,
+                  amount: paymentIntent.amount - charges,
+                });
+              });
+          });
+      } else {
+        const paymentIntent = await stripeInstance().paymentIntents.retrieve(
+          order.paymentIntentId
+        );
+
+        const chargeId = paymentIntent.latest_charge;
+        const charge = await stripeInstance().charges.retrieve(chargeId);
+
+        const balance_transaction =
+          await stripeInstance().balanceTransactions.retrieve(
+            charge.balance_transaction
+          );
+
+        const charges = balance_transaction.fee;
+
+        await stripeInstance()
+          .charges.create({
+            amount: charges,
+            currency: "cad",
+            source: restaurant.stripeAccountId,
+          })
+          .then(async () => {
+            await stripeInstance()
+              .transfers.retrieve(order.transferId)
+              .then(async (transfer) => {
+                await stripeInstance()
+                  .transfers.createReversal(transfer.id, {
+                    amount: transfer.amount,
+                  })
+                  .then(async () => {
+                    await stripeInstance().refunds.create({
+                      payment_intent: order.paymentIntentId,
+                      amount: paymentIntent.amount,
+                    });
+                  });
+              });
+          });
+      }
     }
 
     return res.status(200).json({ data: updatedOrders });
