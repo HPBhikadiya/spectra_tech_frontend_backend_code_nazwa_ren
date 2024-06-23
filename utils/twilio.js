@@ -5,9 +5,9 @@ const twilio = new Twilio(config.twilioSID, config.twilioAuthToken, {
   lazyLoading: true,
 });
 
-export const sendMessageTwilio = ({ to, amount }) => {
+export const sendMessageTwilio = ({ to, amount, twilioMessage }) => {
   return twilio.messages.create({
-    body: `You got an new Order ${amount}`,
+    body: twilioMessage,
     from: config.twilioPhoneNumber,
     to,
   });

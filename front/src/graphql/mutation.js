@@ -49,6 +49,7 @@ const PLACE_ORDER = gql`
     $taxes: Float
     $instruction: String
     $paymentIntentId: String
+    $orderOption: String
     $tip: Float
     $cart: [CartInput]!
   ) {
@@ -65,6 +66,7 @@ const PLACE_ORDER = gql`
         taxes: $taxes
         instruction: $instruction
         paymentIntentId: $paymentIntentId
+        orderOption: $orderOption
         tip: $tip
         cart: $cart
       }
@@ -85,6 +87,7 @@ const PLACE_ORDER = gql`
       }
       paymentIntentId
       transferId
+      orderOption
       paymentDetails {
         tip
         subTotalAmount

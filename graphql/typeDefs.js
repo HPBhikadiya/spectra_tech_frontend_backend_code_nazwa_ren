@@ -92,6 +92,7 @@ const typeDefs = gql`
     rateId: Rate
     paymentIntentId: String
     transferId: String
+    orderOption: String
     paymentDetails: [paymentDetails]
   }
 
@@ -149,6 +150,7 @@ const typeDefs = gql`
     tip: Float
     cart: [CartInput]
     paymentIntentId: String
+    orderOption: String
   }
 
   input CartInput {

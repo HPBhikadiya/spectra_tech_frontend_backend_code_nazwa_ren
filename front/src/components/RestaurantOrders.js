@@ -415,6 +415,9 @@ export default function CustomerOrders(props) {
                       "yyyy-MM-DD ddd hh:mm:ss"
                     )} `}
                   </Typography>
+                  <Typography variant="caption" style={{}}>
+                    {order.orderOption}
+                  </Typography>
                   <Typography variant="caption" style={{ paddingLeft: 5 }}>
                     {`$${order.total_amount}`}
                   </Typography>

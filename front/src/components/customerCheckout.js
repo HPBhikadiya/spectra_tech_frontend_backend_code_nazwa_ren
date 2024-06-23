@@ -82,6 +82,11 @@ export default function CustomerCheckout() {
     customerProfile.delivery_addresses || []
   );
   const [selectedAddress, setSelectedAddress] = useState("");
+  const [orderOption, setOrderOption] = useState("");
+
+  const handleOptionChange = (e) => {
+    setOrderOption(e.target.value);
+  };
   const [tip, setTip] = useState(0);
   const [newAddess, setNewAddess] = useState();
   const [open, setOpen] = useState(false);
@@ -94,6 +99,11 @@ export default function CustomerCheckout() {
   const classes = useStyles();
 
   const handleClickOpen = () => {
+    if (orderOption === "") {
+      alert("Select an order option");
+      return;
+    }
+
     setOpen(true);
   };
 
@@ -288,6 +298,7 @@ export default function CustomerCheckout() {
             instruction: cart[0]?.instruction,
             tip: parseFloat(tip),
             paymentIntentId,
+            orderOption,
             cart: cart.map((item) => {
               return {
                 ...item,
@@ -670,6 +681,39 @@ export default function CustomerCheckout() {
             >
               {`$ ${totalAmount.toFixed(2)}`}
             </Typography>
+          </div>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              paddingTop: 10,
+              paddingBottom: 0,
+            }}
+          >
+            <Typography variant="body1" color="black">
+              Order Option:
+            </Typography>
+            <input
+              type="radio"
+              id="order-option-dine-in"
+              name="orderOption"
+              value="Dine-In"
+              checked={orderOption === "Dine-In"}
+              onChange={handleOptionChange}
+            />
+            <label htmlFor="order-option-dine-in">Dine-In</label>
+            <br />
+            <input
+              type="radio"
+              id="order-option-take-out"
+              name="orderOption"
+              value="Take-Out"
+              checked={orderOption === "Take-Out"}
+              onChange={handleOptionChange}
+            />
+            <label htmlFor="order-option-take-out">Take-Out</label>
+            <br />
           </div>
           <div
             style={{ width: "100%", display: "flex", justifyContent: "center" }}

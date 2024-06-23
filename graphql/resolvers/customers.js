@@ -103,6 +103,7 @@ const resolvers = {
           instruction,
           tip,
           paymentIntentId,
+          orderOption
         } = placeOrderInput;
         // For single Rest order place:
         let cartList = cart?.length > 0 && cart[0];
@@ -136,6 +137,7 @@ const resolvers = {
           total_amount,
           order_items,
           paymentIntentId,
+          orderOption
         };
 
         const restaurant = await RestaurantModel.findById(orderPayload.res_id);
@@ -147,13 +149,33 @@ const resolvers = {
         const mailData = {
           email: restaurant.email,
           subject: "New Order received.",
-          html: `<strong>New order Received ${total_amount}</strong>`,
+          html: `<html>
+              <body>
+                <p>New Order Received!</p>
+                ${order_items
+                  .map(
+                    (item) =>
+                      ` <p>
+                      ${item.quantity} x ${item.dish_name}
+                    </p>`
+                  )
+                  .join("")}
+                <p>Total Amount: ${total_amount}</p>
+              </body>
+            </html>`,
         };
+
+        const twilioMessage = `New Order Received! \n ${order_items
+          .map((item) => {
+            return `${item.quantity} x ${item.dish_name} \n`;
+          })
+          .join("")} \nTotal Amount: ${total_amount}`;
 
         if (restaurant.notificationMode === "TEXT") {
           await sendMessageTwilio({
             to: restaurant.phone_number,
             amount: total_amount,
+            twilioMessage,
           }).catch(async (error) => {
             console.log(error);
           });
@@ -165,6 +187,7 @@ const resolvers = {
           await sendMessageTwilio({
             to: restaurant.phone_number,
             amount: total_amount,
+            twilioMessage,
           }).catch(async (error) => {
             console.log(error);
           });

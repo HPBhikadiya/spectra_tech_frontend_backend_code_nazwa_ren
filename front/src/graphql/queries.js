@@ -85,6 +85,7 @@ const GET_CUSTOMER_ORDERS = gql`
         delivery_status
         paymentIntentId
         transferId
+        orderOption
         paymentDetails {
           tip
           subTotalAmount
