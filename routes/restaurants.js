@@ -198,7 +198,7 @@ router.put("/order", async (req, res) => {
     order.delivery_status = delivery_status;
     order = await order.save();
     const restaurant = await Restaurants.findById(order.res_id);
-    let updatedOrders = await Orders.findById(order_id);
+    let updatedOrders = await Orders.findById({ res_id });
 
     if (delivery_status === 4) {
       if (cancelReason === 1) {

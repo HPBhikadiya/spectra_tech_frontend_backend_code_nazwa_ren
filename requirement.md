@@ -56,7 +56,7 @@ the text looks long but its just the explication
 
 for the database i have mongodb
 
-\*================================
+\*================================ REQ 2 =============================
 
 After tipping, Customer is notified that:
 
@@ -119,3 +119,11 @@ For cancel put a reason why cancel ( restaurant, user)
 
 refund policy
 
+
+\*================================ REQ 3 =============================
+
+
+
+The minimum order before taxes and tips is $10. We should be able to change that number if we need on the admin page
+after cancellation redirect to orders page.
+Customer cancel will charge to customer => notified you  will be charge for stripe fee

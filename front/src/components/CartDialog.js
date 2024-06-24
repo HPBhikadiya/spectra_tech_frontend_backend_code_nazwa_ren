@@ -212,7 +212,15 @@ export default function SimpleDialog(props) {
                 // cart[0].instruction = instruction;
                 dispatch(addInstructionToCart({ instruction }));
               }
-              onCartCheckout();
+              if (totalAmount.toFixed(2) >= 10) {
+                onCartCheckout();
+              } else {
+                alert(
+                  `Minimum order amount should be $10 \nCurrent amount is $${totalAmount.toFixed(
+                    2
+                  )}`
+                );
+              }
             }}
             variant="outlined"
             color="primary"
