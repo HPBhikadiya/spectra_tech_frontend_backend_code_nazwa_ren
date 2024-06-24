@@ -103,7 +103,7 @@ const resolvers = {
           instruction,
           tip,
           paymentIntentId,
-          orderOption
+          orderOption,
         } = placeOrderInput;
         // For single Rest order place:
         let cartList = cart?.length > 0 && cart[0];
@@ -137,7 +137,7 @@ const resolvers = {
           total_amount,
           order_items,
           paymentIntentId,
-          orderOption
+          orderOption,
         };
 
         const restaurant = await RestaurantModel.findById(orderPayload.res_id);

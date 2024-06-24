@@ -193,15 +193,16 @@ router.get("/:id/orders", async (req, res) => {
 // Update order
 router.put("/order", async (req, res) => {
   try {
-    const { order_id, delivery_status, res_id, cancelReason } = req.body;
+    const { order_id, delivery_status, res_id, cancelReason, isFromCustomer } =
+      req.body;
     let order = await Orders.findById(order_id);
     order.delivery_status = delivery_status;
     order = await order.save();
     const restaurant = await Restaurants.findById(order.res_id);
-    let updatedOrders = await Orders.findById({ res_id });
+    let updatedOrders = await Orders.find({ res_id });
 
     if (delivery_status === 4) {
-      if (cancelReason === 1) {
+      if (cancelReason === 1 || isFromCustomer) {
         const paymentIntent = await stripeInstance().paymentIntents.retrieve(
           order.paymentIntentId
         );

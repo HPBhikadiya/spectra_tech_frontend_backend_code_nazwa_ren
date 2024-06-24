@@ -93,16 +93,16 @@ const typeDefs = gql`
     paymentIntentId: String
     transferId: String
     orderOption: String
-    paymentDetails: [paymentDetails]
+    paymentDetails: paymentDetails
   }
 
   type paymentDetails {
-    tip: Int
-    subTotalAmount: Int
-    commissionAmount: Int
-    charges: Int
-    cutAmount: Int
-    transfer: Int
+    tip: Float
+    subTotalAmount: Float
+    commissionAmount: Float
+    charges: Float
+    cutAmount: Float
+    transfer: Float
   }
 
   type OrderItem {

@@ -85,7 +85,6 @@ const useStyles = makeStyles({
 
 export default function CustomerOrders(props) {
   const renderCharacter = (value, index, order) => {
-    
     return (
       <Star
         style={{ color: "#ff9800" }}
@@ -280,6 +279,7 @@ export default function CustomerOrders(props) {
       res_id,
       order_id,
       delivery_status: 4,
+      isFromCustomer: true,
     };
 
     try {
@@ -457,7 +457,17 @@ export default function CustomerOrders(props) {
                     size="small"
                     variant="text"
                     onClick={() => {
-                      cancelOrderStatusApi({ order });
+                      if (
+                        window.confirm(
+                          `You will be charged a Stripe fee. ${
+                            order.paymentDetails
+                              ? order.paymentDetails.charges
+                              : ""
+                          }`
+                        )
+                      ) {
+                        cancelOrderStatusApi({ order });
+                      }
                     }}
                     style={{
                       alignSelf: "center",
