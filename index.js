@@ -19,6 +19,7 @@ import usepassport from "./middleware/passport.js";
 import typeDefs from "./graphql/typeDefs.js";
 import resolvers from "./graphql/resolvers/index.js";
 import paymentRouter from "./routes/payment.js";
+import websiteSettingRouter from "./routes/websiteSetting.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { v4 as uuidv4 } from "uuid";
@@ -76,6 +77,7 @@ app.use("/login", login);
 app.use("/customers", customers);
 app.use("/logout", logout);
 app.use("/payment", paymentRouter);
+app.use("/website-setting", websiteSettingRouter);
 app.use("", imageUpload);
 // app.use("/stripe", async (req, res) => {
 //   const accounts = await stripeInstance().accounts.retrieve(

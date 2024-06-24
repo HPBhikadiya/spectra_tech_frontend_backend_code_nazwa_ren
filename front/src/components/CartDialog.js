@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { Button, makeStyles, ButtonGroup, TextField } from "@material-ui/core";
@@ -21,7 +21,7 @@ import {
   removeDishFromCart,
   addInstructionToCart,
 } from "../app/reducers/mainSlice";
-
+import axios from "axios";
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
 export default function SimpleDialog(props) {
@@ -74,6 +74,18 @@ export default function SimpleDialog(props) {
         cart[resIndex].dishes[dishIndex].quantity;
     }
   }
+
+  const fetchWebSiteSettings = async () => {
+    try {
+      const response = await axios.get("http://localhost:3002/website-setting");
+      return response;
+    } catch (error) {
+      console.error("Error fetching websiteSettings", error);
+      alert("something happened wrong, Please try again later.");
+      handleClose();
+      return null;
+    }
+  };
 
   return (
     <Dialog
@@ -207,20 +219,30 @@ export default function SimpleDialog(props) {
           <Button
             size="small"
             disabled={cart.length === 0}
-            onClick={() => {
+            onClick={async () => {
               if (cart.length > 0) {
                 // cart[0].instruction = instruction;
                 dispatch(addInstructionToCart({ instruction }));
               }
-              if (totalAmount.toFixed(2) >= 10) {
-                onCartCheckout();
-              } else {
-                alert(
-                  `Minimum order amount should be $10 \nCurrent amount is $${totalAmount.toFixed(
-                    2
-                  )}`
-                );
-              }
+
+              await fetchWebSiteSettings().then((response) => {
+                if (response.data) {
+                  if (response.data.minimumValue) {
+                    const minimumOrderValue = response.data.minimumValue;
+                    if (totalAmount.toFixed(2) >= minimumOrderValue) {
+                      onCartCheckout();
+                    } else {
+                      alert(
+                        `Minimum order amount should be $${minimumOrderValue} \nCurrent amount is $${totalAmount.toFixed(
+                          2
+                        )}`
+                      );
+                    }
+                  }
+                } else {
+                  onCartCheckout();
+                }
+              });
             }}
             variant="outlined"
             color="primary"
