@@ -98,7 +98,7 @@ const resolvers = {
         let order = await Orders.findById(order_id);
         order.delivery_status = delivery_status;
         order = await order.save();
-        const updatedOrders = await Orders.find({ res_id });
+        const updatedOrders = await Orders.find({ res_id }).sort({ _id: -1 });
         return updatedOrders;
       } catch (error) {
         console.log(error);

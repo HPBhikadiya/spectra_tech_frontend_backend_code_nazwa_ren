@@ -25,7 +25,9 @@ const resolvers = {
     async getCustomerOrders(_, { id, page = 1, pageSize = 5 }) {
       try {
         const customer_id = id;
-        let orders = await Orders.find({ customer_id }).populate("rateId");
+        let orders = await Orders.find({ customer_id })
+          .populate("rateId")
+          .sort({ _id: -1 });
         let pageMax = Math.ceil(orders.length / pageSize);
         if (page > pageMax) {
           page = pageMax;

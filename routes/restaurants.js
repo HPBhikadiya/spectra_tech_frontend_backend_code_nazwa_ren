@@ -184,7 +184,7 @@ router.delete("/:res_id/dish/:id", async (req, res) => {
 router.get("/:id/orders", async (req, res) => {
   try {
     const res_id = req.params.id;
-    const orders = await Orders.find({ res_id });
+    const orders = await Orders.find({ res_id }).sort({ _id: -1 });
     return res.status(200).json({ data: orders });
   } catch (error) {
     console.log(error);
@@ -201,7 +201,7 @@ router.put("/order", async (req, res) => {
     order.delivery_status = delivery_status;
     order = await order.save();
     const restaurant = await Restaurants.findById(order.res_id);
-    let updatedOrders = await Orders.find({ res_id });
+    let updatedOrders = await Orders.find({ res_id }).sort({ _id: -1 });
 
     if (delivery_status === 4) {
       if (cancelReason === 1 || isFromCustomer) {

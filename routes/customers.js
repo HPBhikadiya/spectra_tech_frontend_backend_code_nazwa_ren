@@ -29,7 +29,7 @@ router.get(
       console.log(error);
       return res.status(500).json(error);
     }
-  },
+  }
 );
 
 //Update customer profile:
@@ -82,7 +82,7 @@ router.put(
       console.log(error);
       return res.status(500).json(error);
     }
-  },
+  }
 );
 
 router.get(
@@ -106,7 +106,7 @@ router.get(
       console.log(error);
       return res.status(500).json(error);
     }
-  },
+  }
 );
 
 router.post("/favourites", async (req, res) => {
@@ -118,7 +118,7 @@ router.post("/favourites", async (req, res) => {
       return res.status(400).send("Customer not found");
     }
     const index = customer.favourites.findIndex(
-      (item) => item && item.toString() === res_id,
+      (item) => item && item.toString() === res_id
     );
     if (index !== -1) {
       return res.status(400).send("Restaurant Already present in favourites");
@@ -141,7 +141,7 @@ router.delete(
     try {
       let customer = await Customers.findById(customer_id);
       const idx = customer.favourites.findIndex(
-        (item) => item && item.toString() === res_id,
+        (item) => item && item.toString() === res_id
       );
       if (idx !== -1) {
         customer.favourites.splice(idx, 1);
@@ -158,7 +158,7 @@ router.delete(
       console.log(error);
       return res.status(500).json(error);
     }
-  },
+  }
 );
 
 // router.get('/:id/delivery_address', async (req, res) => {
@@ -203,7 +203,7 @@ router.post(
       console.log(error);
       return res.status(500).json(error);
     }
-  },
+  }
 );
 
 //TODO:
@@ -215,7 +215,7 @@ router.get(
       const customer_id = req.params.id;
       let page = req.query.page || 1;
       let pageSize = req.query.pageSize || 5;
-      let orders = await Orders.find({ customer_id });
+      let orders = await Orders.find({ customer_id }).sort({ _id: -1 });
       let pageMax = Math.ceil(orders.length / pageSize);
       if (page > pageMax) {
         page = pageMax;
@@ -228,7 +228,7 @@ router.get(
       console.log(error);
       return res.status(500).json(error);
     }
-  },
+  }
 );
 
 router.post(
@@ -290,7 +290,7 @@ router.post(
       console.log(error);
       return res.status(500).json(error);
     }
-  },
+  }
 );
 
 export default router;
