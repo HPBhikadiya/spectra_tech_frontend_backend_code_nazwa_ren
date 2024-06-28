@@ -129,10 +129,14 @@ Customer cancel will charge to customer => notified you will be charge for strip
 
 Here are the next things we need. Let me know if you can do this and how much time it will take.
 
-1. When restaurant signs up, there is a commission option. They should only have a discount option. Commission is decided by Spectra, not by the restaurant. Spectra decides the commission for each restaurant through the Admin page.
-2. On restaurant sign up, when they choose notificationmode, it should say “Choose how you would like to receive orders. Don’t worry if you miss them, customers will always show up in person to remind you otherwise! ”
-3. Next to the choose file on restaurant registration page, explain “Upload your menu for us to set up your restaurant. You’ll be able to add/remove items after.”
-4. After signing up, they should be logged in automatically. No need to return to login page and type everything again.
+✅ 1. When restaurant signs up, there is a commission option. They should only have a discount option. Commission is decided by Spectra, not by the restaurant. Spectra decides the commission for each restaurant through the Admin page.
+
+=> 2. On restaurant sign up, when they choose notificationmode, it should say “Choose how you would like to receive orders. Don’t worry if you miss them, customers will always show up in person to remind you otherwise! ”
+
+✅ 3. Next to the choose file on restaurant registration page, explain “Upload your menu for us to set up your restaurant. You’ll be able to add/remove items after.”
+
+❌ 4. After signing up, they should be logged in automatically. No need to return to login page and type everything again.
+
 5. Forgot password button and password reset page after clicking it. They should type email, after which a password reset email will be sent to their email account. Write the following on the forgot password page: “Enter your email to have a password reset link sent to you.” Make sure that the email will only be sent if they type an email of an actual account. The email they receive should say:
 
 Hello!
@@ -149,8 +153,10 @@ Once weekly schedule is selected, store should be able to select closed dates (f
 When a restaurant is only available for take-out or dine-in, customers will see when browsing for stores that a restaurant is only available for Dine-in or Takeout (eg. “Take-out only”)
 When restaurants are not available, their picture on the customer’s page will be filtered and it will move to the bottom of the list. On the filtered image, it will also show the next time the restaurant opens (eg. if it opens later today, it will say “Available at 18:00”) if it opens on a future date, it will say “Available July 18th at 19:00”
 
-7. If restaurant does not upload a photo for menu item, it will just show a generic photo. Size of picture should not be stretched.
-8. New orders should be at the top of the page for both customers and restaurants. (currently at the bottom)
+=> 7. If restaurant does not upload a photo for menu item, it will just show a generic photo. Size of picture should not be stretched.
+✅ 8. New orders should be at the top of the page for both customers and restaurants. (currently at the bottom) 
+
 9. Login should work when letters are capitalized for both merchants and customers.
-10. When ordering food, each item selected should show a total number (1,2,3,4, etc.) on the cart at the top right.
-11. Customers should be able to add multiple items from menu instead of only being able to do so after opening the cart.
+
+=> 10. When ordering food, each item selected should show a total number (1,2,3,4, etc.) on the cart at the top right.
+=> 11. Customers should be able to add multiple items from menu instead of only being able to do so after opening the cart.
