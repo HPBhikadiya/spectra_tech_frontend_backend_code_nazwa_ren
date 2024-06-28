@@ -131,7 +131,7 @@ Here are the next things we need. Let me know if you can do this and how much ti
 
 ✅ 1. When restaurant signs up, there is a commission option. They should only have a discount option. Commission is decided by Spectra, not by the restaurant. Spectra decides the commission for each restaurant through the Admin page.
 
-=> 2. On restaurant sign up, when they choose notificationmode, it should say “Choose how you would like to receive orders. Don’t worry if you miss them, customers will always show up in person to remind you otherwise! ”
+=> 2. On restaurant sign up, when they choose notification mode, it should say “Choose how you would like to receive orders. Don’t worry if you miss them, customers will always show up in person to remind you otherwise! ”
 
 ✅ 3. Next to the choose file on restaurant registration page, explain “Upload your menu for us to set up your restaurant. You’ll be able to add/remove items after.”
 
