@@ -172,6 +172,7 @@ const resolvers = {
           timing_close: "",
           token: "",
           restaurant_image: "",
+          menuUrl: "",
           address: {
             street_address,
             apt_number,

@@ -107,6 +107,7 @@ export default function ResProfile() {
   );
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(resProfile?.image || "");
+  const [menuUrl, setMenuUrl] = useState(resProfile?.menuUrl || "");
 
   const countries = [
     {
@@ -289,6 +290,27 @@ export default function ResProfile() {
       }
     }
   };
+  const handleMenuFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post("/upload_menu", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        const menuUrl = response.data.menuUrl;
+        setMenuUrl(menuUrl);
+        setImageFile(file);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
+    }
+  };
   const updateProfileApi = async () => {
     if (!validateInputs()) {
       return false;
@@ -313,6 +335,7 @@ export default function ResProfile() {
       zipcode: zipcode,
       isAddressUpdated: true,
       restaurant_image: imageUrl,
+      menuUrl: menuUrl,
       discount,
     };
     console.log("test here" + body);

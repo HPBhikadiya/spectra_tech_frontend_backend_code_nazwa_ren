@@ -126,6 +126,22 @@ app.post("/upload_image", upload.single("file"), (req, res) => {
     res.status(500).send({ message: "Server error" });
   }
 });
+app.post("/upload_menu", upload.single("file"), (req, res) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      return res.status(400).send({ message: "No file uploaded" });
+    }
+
+    // Here you might process the file, store it in a database, etc.
+    // Then you would return the URL where the file can be accessed
+    const menuUrl = `../uploads/menu/${file.filename}`;
+    res.status(200).send({ menuUrl: menuUrl });
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).send({ message: "Server error" });
+  }
+});
 
 // Use of another path to see results for js_refresher.js
 app.post("/process-payment", async (req, res) => {

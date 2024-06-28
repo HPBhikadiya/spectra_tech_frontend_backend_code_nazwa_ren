@@ -23,6 +23,7 @@ const GET_ALL_RES = gql`
       phone_number
       description
       restaurant_image
+      menuUrl
       timing_open
       timing_close
       token

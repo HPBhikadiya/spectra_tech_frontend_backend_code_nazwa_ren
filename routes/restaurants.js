@@ -52,6 +52,7 @@ router.put("/profile", async (req, res) => {
       phone_number,
       description,
       restaurant_image,
+      menuUrl,
       timing_open,
       timing_close,
       street_address,
@@ -71,6 +72,7 @@ router.put("/profile", async (req, res) => {
       phone_number,
       description,
       restaurant_image,
+      menuUrl,
       timing_open,
       timing_close,
       address: {

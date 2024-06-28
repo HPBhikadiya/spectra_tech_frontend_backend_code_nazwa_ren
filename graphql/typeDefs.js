@@ -30,6 +30,7 @@ const typeDefs = gql`
     phone_number: String
     description: String
     restaurant_image: String
+    menuUrl: String
     timing_open: String
     timing_close: String
     token: String
@@ -170,6 +171,7 @@ const typeDefs = gql`
     commission: Int
     stripeAccountId: String
     restaurant_image: String
+    menuUrl: String
     notificationMode: String
     dishes: [dishCartInput]
   }
