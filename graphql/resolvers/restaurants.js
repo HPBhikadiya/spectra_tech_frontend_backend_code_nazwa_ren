@@ -185,6 +185,8 @@ const resolvers = {
         });
         const data = await resBody.save();
 
+        const resData = await Restaurants.findById(data._id);
+
         const account = await stripeInstance().accounts.create({
           country: "CA",
           email: email,
@@ -204,7 +206,7 @@ const resolvers = {
         const accountId = account.id;
         const accountLink = await stripeInstance().accountLinks.create({
           account: accountId,
-          return_url: `http://localhost:3000/login`,
+          return_url: `http://localhost:3000/`,
           refresh_url: `http://localhost:3000/refresh/${accountId}`,
           type: "account_onboarding",
         });
@@ -215,8 +217,11 @@ const resolvers = {
           },
           { new: true }
         );
-
-        return accountLink;
+        const token = jwt.sign({ email }, config.token_key, {
+          expiresIn: "2h",
+        });
+        resData.token = token;
+        return { resData, accountLink };
       } catch (error) {
         console.log("error==", error);
         throw new Error(error);

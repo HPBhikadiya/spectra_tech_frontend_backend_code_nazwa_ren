@@ -132,10 +132,43 @@ const RESTAURANT_SIGNUP = gql`
         zipcode: $zipcode
       }
     ) {
-      object
-      created
-      expires_at
-      url
+      accountLink {
+        object
+        created
+        expires_at
+        url
+      }
+      resData {
+        dishes {
+          food_type
+          dish_category
+          res_id
+          main_ingredient
+          description
+          dish_price
+          dish_image
+          dish_name
+          _id
+        }
+        address {
+          zipcode
+          country
+          state
+          city
+          apt_number
+          street_address
+        }
+        _id
+        name
+        email
+        password
+        delivery_option
+        phone_number
+        description
+        timing_open
+        timing_close
+        token
+      }
     }
   }
 `;

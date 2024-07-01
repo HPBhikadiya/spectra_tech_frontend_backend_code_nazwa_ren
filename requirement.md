@@ -135,7 +135,7 @@ Here are the next things we need. Let me know if you can do this and how much ti
 
 ✅ 3. Next to the choose file on restaurant registration page, explain “Upload your menu for us to set up your restaurant. You’ll be able to add/remove items after.”
 
-❌ 4. After signing up, they should be logged in automatically. No need to return to login page and type everything again.
+✅ 4. After signing up, they should be logged in automatically. No need to return to login page and type everything again.
 
 5. Forgot password button and password reset page after clicking it. They should type email, after which a password reset email will be sent to their email account. Write the following on the forgot password page: “Enter your email to have a password reset link sent to you.” Make sure that the email will only be sent if they type an email of an actual account. The email they receive should say:
 

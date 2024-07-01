@@ -242,9 +242,14 @@ const typeDefs = gql`
   # }
 
   type RestaurantSignUpResponse {
+    accountLink: StripeLink
+    resData: Restaurant
+  }
+
+  type StripeLink {
     object: String
-    created: Int
-    expires_at: Int
+    created: String
+    expires_at: String
     url: String
   }
 

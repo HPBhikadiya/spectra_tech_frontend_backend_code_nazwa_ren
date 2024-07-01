@@ -2,38 +2,24 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import NavigationBar from "./navigationbar.js";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  useMutation,
-  useLazyQuery,
-  gql,
-} from "@apollo/client";
-import axios from "axios";
+import { useMutation } from "@apollo/client";
 import {
   Avatar,
   CssBaseline,
   Button,
   Container,
-  FormControl,
-  FormLabel,
   FormControlLabel,
   makeStyles,
   Link,
-  Grid,
   Checkbox,
   Typography,
   TextField,
-  Radio,
-  RadioGroup,
   MenuItem,
 } from "@material-ui/core";
 
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { useForm, Controller } from "react-hook-form";
-import { onResSignup } from "../app/reducers/mainSlice";
+import { useForm } from "react-hook-form";
+import { onResLogin } from "../app/reducers/mainSlice";
 import { isValidEmail } from "../utility.js";
 import { RESTAURANT_SIGNUP } from "../graphql/mutation.js";
 
@@ -281,11 +267,14 @@ export default function ResSignup() {
   // }`;
 
   const [restaurantSignup] = useMutation(RESTAURANT_SIGNUP, {
-    onCompleted(res) {
+    async onCompleted(res) {
       console.log("da", res);
+      console.log("da", res.restaurantSignup.resData);
       // history.push("/login");
-      window.location.href = res.restaurantSignup.url;
-      dispatch(onResSignup());
+      dispatch(onResLogin(res.restaurantSignup.resData));
+      setTimeout(() => {
+        window.location.href = res.restaurantSignup.accountLink.url;
+      }, 2000);
     },
     onError(e) {
       alert(JSON.parse(JSON.stringify(e))?.message);
