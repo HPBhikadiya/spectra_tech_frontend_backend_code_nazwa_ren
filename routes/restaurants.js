@@ -1,6 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
+import bcrypt from "bcrypt";
+import randomstring from "randomstring";
+import { sendEmail } from "../utils/sendgrid.js";
 import auth from "../middleware/auth.js";
 import Restaurants, { Dish } from "../Models/restaurants.js";
 import Orders from "../Models/orders.js";
@@ -274,6 +277,78 @@ router.put("/order", async (req, res) => {
     }
 
     return res.status(200).json({ data: updatedOrders });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
+// Forgot Pessword
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const restaurant = await Restaurants.findOne({ email: email });
+    if (!restaurant) {
+      return res.status(400).json({ msg: "Invalid email" });
+    }
+
+    const randomString = randomstring.generate();
+
+    await Restaurants.findOneAndUpdate(
+      { email: email },
+      { token: randomString },
+      { new: true }
+    );
+
+    const mailData = {
+      email: email,
+      subject: "Forgot Password",
+      html: `<html>
+            <body>
+              <p>Hello!</p>
+              
+              <p>You requested a password reset from us. Please use the link below to set up a new password:</p>
+  
+              <p><a href="http://localhost:3002/restaurants/reset-password?token=${randomString}">www.reset.com</a></p>
+            </body>
+          </html>`,
+    };
+
+    await sendEmail(mailData).catch(async (error) => {
+      console.log(error);
+    });
+
+    return res.status(200).json({
+      message: "Please check your Mail and Reset your Password",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    const existingToken = await Restaurants.findOne({ token: token });
+
+    if (!existingToken) {
+      return res.status(400).send("restaurant can not reset Password");
+    }
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    await Restaurants.findOneAndUpdate(
+      { email: existingToken.email },
+      { password: hashedPassword, token: "" },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      message: "forgot Password Successful",
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json(error);

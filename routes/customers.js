@@ -2,10 +2,13 @@ import express from "express";
 // import pool from "../pool.js";
 import auth from "../middleware/auth.js";
 import passport from "passport";
+import bcrypt from "bcrypt";
+import randomstring from "randomstring";
 import Customers from "../Models/customers.js";
 import Restaurants from "../Models/restaurants.js";
 import Orders from "../Models/orders.js";
 import multer from "multer";
+import { sendEmail } from "../utils/sendgrid.js";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import fs from "fs";
@@ -292,5 +295,77 @@ router.post(
     }
   }
 );
+
+//FORGOT PASSWORD
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const existingUser = await Customers.findOne({ email: email });
+    if (!existingUser) {
+      return res.status(400).send("Customer not found");
+    }
+
+    const randomString = randomstring.generate();
+
+    await Customers.findOneAndUpdate(
+      { email: email },
+      { token: randomString },
+      { new: true }
+    );
+
+    const mailData = {
+      email: email,
+      subject: "Forgot Password",
+      html: `<html>
+            <body>
+              <p>Hello!</p>
+              
+              <p>You requested a password reset from us. Please use the link below to set up a new password:</p>
+
+              <p><a href="http://localhost:3002/customers/reset-password?token=${randomString}">www.reset.com</a></p>
+            </body>
+          </html>`,
+    };
+
+    await sendEmail(mailData).catch(async (error) => {
+      console.log(error);
+    });
+
+    return res.status(200).json({
+      message: "Please check your Mail and Reset your Password",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    const existingToken = await Customers.findOne({ token: token });
+
+    if (!existingToken) {
+      return res.status(400).send("Customer can not reset Password");
+    }
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    await Customers.findOneAndUpdate(
+      { email: existingToken.email },
+      { password: hashedPassword, token: "" },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      message: "forgot Password Successful",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
 
 export default router;
